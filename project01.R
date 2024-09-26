@@ -1,6 +1,6 @@
 library(tidyverse)
 library(DT)
-setwd("C:/Users/MT/Desktop/R Coding/Project 01/project01")
+setwd("C:/Users/MT/Desktop/R Coding/STA9750-2024-FALL")
 
 FARES <- readxl::read_xlsx("2022_fare_revenue.xlsx") |>
     select(-`State/Parent NTD ID`, 
@@ -126,8 +126,8 @@ USAGE |>
 
 USAGE |>
   group_by(Mode) |>
-  summarise(UPT_Total = sum(UPT)) |>
-  arrange(desc(UPT_Total)) |>
+  summarise(VRM_Total = sum(VRM)) |>
+  arrange(desc(VRM_Total)) |>
   head(1) |>
   ungroup()
 # The data shows bus transportation had the most vehicle revenue miles "VRM"
@@ -161,16 +161,14 @@ print(nyc_filter_q5_part3)
 
 colnames(USAGE)
 
-efficiency_ratio <- USAGE |>
+vrm_per_upt <- USAGE |>
   group_by(Agency) |>
   summarise(UPT_Total = sum(UPT), VRM_Total = sum(VRM), VRM_per_UPT_ratio = (VRM_Total/UPT_Total)) |>
   ungroup() |>
-  arrange(desc(VRM_per_UPT_ratio))
-  
-efficient_companies <- efficiency_ratio |>
+  arrange(VRM_per_UPT_ratio) |>
   head(5)
 
-print(efficient_companies)
+print(vrm_per_upt)
 # Most used mode per metro area
 
 most_used_mode_per_metro_area <- USAGE |>
@@ -295,5 +293,4 @@ highest_fares_per_VRM <- USAGE_AND_FINANCIALS |>
 print(highest_fares_per_VRM)
 
 # You may wish to restrict your answer to major transit systems, which you can define as those with 400,000 UPT per annum.
-
 
