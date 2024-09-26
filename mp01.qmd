@@ -389,5 +389,5 @@ print(highest_fares_per_VRM)
 
 ```
 
-##Conclusion
+## Conclusion
 Farebox recovery rate for the Transit Authority of Central Kentucky, and more specifically the Vanpool mode seems to be great. There should be a deeper investigation into why this is, and how this transportation mode can be escalated to serve more people, or how Vanpool transportation mode's characteristics can be leveraged for other transportation modes to achieve such recovery rates
