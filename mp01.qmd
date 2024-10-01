@@ -11,7 +11,7 @@ This is a small project in which I explore data from the [National Transit Datab
 
 To start with the project, I used the following code to download the data. Here we can see some tables being created with specific columns, then these new tables are joined.
 
-```{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(DT)
 setwd("C:/Users/MT/Desktop/R Coding/STA9750-2024-FALL")
@@ -88,8 +88,7 @@ sample_n(USAGE, 1000) |>
 
 After downloading the data, the first task is to create a synthetic name. The column `UZA Name` was renamed as `metro_area`:
 
-```         
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 USAGE <- USAGE |> 
   rename(metro_area = `UZA Name`)
 ```
@@ -98,8 +97,7 @@ USAGE <- USAGE |>
 
 Mode column was recoded for easier understanding of data.  Details obtained from [here](https://www.transit.dot.gov/ntd/national-transit-database-ntd-glossary#D)
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 USAGE <- USAGE |>
   mutate(Mode = case_when(
     Mode == "AR" ~ "Alaska Railroad",
@@ -126,8 +124,7 @@ USAGE <- USAGE |>
 
 Now we can see a table with cleaner data:
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 if(!require("DT")) install.packages("DT")
 library(DT)
 
@@ -143,8 +140,7 @@ sample_n(USAGE, 1000) |>
 Q1. What transit agency had the most total VRM in our data set?
 The transit agency with the most  total VRM (Vehicle Revenue Miles) is MTA New York City Transit with around 69 billion in total VRM.
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 USAGE |>
   group_by(Agency) |>
   summarise(UPT_Total = sum(UPT)) |>
@@ -157,7 +153,7 @@ USAGE |>
 Q2. What transit mode had the most total VRM in our data set?
 The transit mode with the most total VRM in our data set is bus with a total UPT (Unlinked Passenger Trips) of around 49 billion
 
-```
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 USAGE |>
   group_by(Mode) |>
   summarise(VRM_Total = sum(VRM)) |>
@@ -174,8 +170,7 @@ Q3. How many trips were taken on the NYC Subway (Heavy Rail) in May 2024?
 A total of 186,478,364 trips were taken on the NYC subway
 
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 colnames(USAGE)
 nyc_filter_q3 <- USAGE |>
   filter(metro_area == "New York--Jersey City--Newark, NY--NJ", Mode == "Heavy Rail", month == "2024-05-01") |>
@@ -191,8 +186,7 @@ Note: This question can’t be answered with the current data
 Q5. How much did NYC subway ridership fall between April 2019 and April 2020?
 NYC subway ridership fell by approximately 91 during the dates indicated. This could be atributed to the Corona Virus pandemic of 2020.
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 nyc_filter_q5_part1 <- USAGE |>
   filter(metro_area == "New York--Jersey City--Newark, NY--NJ", Mode == "Heavy Rail", month == "2019-04-01") |>
   summarise(nyc_sub_2019 = sum(UPT, na.rm = TRUE))
@@ -208,8 +202,7 @@ print(nyc_filter_q5_part3)
 Q4.1 Which Agency has the most VRM per UPT?
 I chose this question because  I believe this shows how efficiently an agency is using its resources. A lower Vehicle Revenue Miles to Unlinked Passenger Trips ratio would show that an Agency is able to maximize the usage of its vehicles in relation to the number of passanger trips. In this case the most efficient based on the previously mentioned definition would be New York City Department of Transportation with a ratio of .00942. However, this needs deeper analysis to determine its implications and flaws
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 vrm_per_upt <- USAGE |>
   group_by(Agency) |>
   summarise(UPT_Total = sum(UPT), VRM_Total = sum(VRM), VRM_per_UPT_ratio = (VRM_Total/UPT_Total)) |>
@@ -223,8 +216,7 @@ print(vrm_per_upt)
 Q4.2 What is the most used mode per metro area?
 The most used mode per metro area is the bus
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 most_used_mode_per_metro_area <- USAGE |>
   group_by(metro_area, Mode) |>
   summarise(total_upt = sum(UPT, na.rm = TRUE), .groups = "drop") |>
@@ -237,8 +229,7 @@ print(most_used_mode_per_metro_area)
 ```
 Q4.3 What are the top metro areas by mode?
 New York Metro area is the top area by what I consider to be the most important modes of transportation: Heavy Rail, Bus, and Commuter Rail
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 top_metro_areas_by_mode <- USAGE |>
   group_by(Mode, metro_area) |>
   summarise(total_upt = sum(UPT, na.rm = TRUE)) |>
@@ -254,8 +245,7 @@ print(top_metro_areas_by_mode)
 
 In this part of the project, I created a new table from USAGE that has annual total (sum) UPT and VRM for 2022
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 
 USAGE_2022_ANNUAL <- USAGE |>
   filter(year(month) == "2022") |>
@@ -304,8 +294,7 @@ Note I did not restrict data to major transit systems because I was interested i
 Q1. Which transit system (agency and mode) had the most UPT in 2022?
 The transit system with the most UPT in 2022 was the MTA New York City Transit
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 USAGE_2022_ANNUAL |>
   group_by(Agency, Mode) |>
   arrange(desc(UPT_Total)) |>
@@ -318,8 +307,7 @@ Q2. Which transit system (agency and mode) had the highest farebox recovery, def
 The Agency Transit Authority of Central Kentucky with the mode of Vanpool had the highest farebox recovery. This indicates that this agency was able to obtain more revenue relative to its expenses in comparison to other Agencies. It its interesting to see that Vanpool occupies the second and third place in this query. This might indicate that this is Mode of transportation is financially efficient
 
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 highest_farebox_recovery <- USAGE_AND_FINANCIALS |>
   group_by(Agency, Mode) |>
   summarise(ratio = (sum(`Total Fares`, na.rm = TRUE)/sum(Expenses, na.rm = TRUE))) |>
@@ -334,8 +322,7 @@ Q3. Which transit system (agency and mode) has the lowest expenses per UPT?
 
 North Carolina State University's Bus transportation had the lowest expenses per UPT. This seems to be a transit system focusing on transportation for a university, so it might be that the low expenses derive from the relative short range of the service provided
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 lowest_expenses_per_UPT <- USAGE_AND_FINANCIALS |>
   group_by(Agency, Mode) |>
   summarise(ratio = (sum(Expenses, na.rm = TRUE)/sum(UPT_Total, na.rm = TRUE)),.groups = "drop") |>
@@ -348,8 +335,7 @@ Q4. Which transit system (agency and mode) has the highest total fares per UPT?
 
 The Altoona Metro Transit Demand Response transportation had the highest total fares per UPT
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 highest_total_fares_per_UPT <- USAGE_AND_FINANCIALS |>
   group_by(Agency, Mode) |>
   summarise(ratio = (sum(`Total Fares`, na.rm = TRUE)/sum(UPT_Total, na.rm = TRUE)),.groups = "drop") |>
@@ -363,8 +349,7 @@ Q5. Which transit system (agency and mode) has the lowest expenses per VRM?
 
 New Mexico Department of Transportation Vanpool mode had the lowest expense per VRM. That same mode is in the next 4 spots of our results. This indicates that Vanpool could be transportation mode that does not require or demands a lot of expenses.
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 lowest_expenses_per_VRM <- USAGE_AND_FINANCIALS |>
   group_by(Agency, Mode) |>
   summarise(ratio = (sum(Expenses, na.rm = TRUE)/sum(VRM_Total, na.rm = TRUE)),.groups = "drop") |>
@@ -378,8 +363,7 @@ Q6. Which transit system (agency and mode) has the highest total fares per VRM?
 
 Chicago Water Taxi (Wendella) Ferryboat transportation had the highest total fares per VRM. This might reflect the fact that expenses and mainteinance for this mode of transportation is higher
 
-```
-{r echo=TRUE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 highest_fares_per_VRM <- USAGE_AND_FINANCIALS |>
   group_by(Agency, Mode) |>
   summarise(ratio = (sum(`Total Fares`, na.rm = TRUE)/sum(VRM_Total, na.rm = TRUE)),.groups = "drop") |>
