@@ -1,0 +1,1080 @@
+---
+title: "Mini-Project #02: The Business of Show Business"
+editor: visual
+---
+
+```{r echo=FALSE, message=FALSE}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(DT)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Introduction
+
+In this project, I will put myself in the shoes of a Hollywood development executive. I will be analyzing data from the [Internet Movie Database (IMDb)](https://datasets.imdbws.com/) with the objective of proposing a new Hollywood project based on the insights provided by the data. To achieve the objective, I will first analyze historical data containing components such as genres, directors, and ratings to find trends and insights.
+
+### Data
+
+We will start by downloading the data from the [Internet Movie Database (IMDb)](https://datasets.imdbws.com/). The following code will automatically download and load these files into `R`:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+#| label: 'imdb_name_basics'
+#| message: false 
+#| warning: false
+#| cache: true
+get_imdb_file <- function(fname){
+    BASE_URL <- "https://datasets.imdbws.com/"
+    fname_ext <- paste0(fname, ".tsv.gz")
+    if(!file.exists(fname_ext)){
+        FILE_URL <- paste0(BASE_URL, fname_ext)
+        download.file(FILE_URL, 
+                      destfile = fname_ext)
+    }
+    as.data.frame(readr::read_tsv(fname_ext, lazy=FALSE))
+}
+
+NAME_BASICS      <- get_imdb_file("name.basics")
+```
+
+```{r}
+#| label: 'imdb_title_basics'
+#| message: false 
+#| warning: false
+#| cache: true
+TITLE_BASICS     <- get_imdb_file("title.basics")
+```
+
+```{r}
+#| label: 'imdb_title_episode'
+#| message: false 
+#| warning: false
+#| cache: true
+TITLE_EPISODES   <- get_imdb_file("title.episode")
+```
+
+```{r}
+#| label: 'imdb_title_ratings'
+#| message: false 
+#| warning: false
+#| cache: true
+TITLE_RATINGS    <- get_imdb_file("title.ratings")
+```
+
+```{r}
+#| label: 'imdb_title_crew'
+#| message: false 
+#| warning: false
+#| cache: true
+TITLE_CREW       <- get_imdb_file("title.crew")
+```
+
+```{r}
+#| label: 'imdb_title_principals'
+#| eval: true
+#| message: false 
+#| warning: false
+#| cache: false
+TITLE_PRINCIPALS <- get_imdb_file("title.principals")
+
+#Note this was run with eval: true once, and then changed to false due to the size of the data. In following steps will will modify this table and cache it.
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Data Sub-Sampling
+
+Given this is a large amount of data, we are going to need to start down-selecting to facilitate analysis performance. For our `NAME_BASICS` table, we'll restrict our attention to people with at least two "known for" credits.[^1]
+
+[^1]: It's not entirely transparent who IMDb decides what projects an actor or director is "known for". Still, it's a reasonable filter that leaves us with more than enough to work with for this project.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+#| label: 'name_basics_filter'
+#| cache: true
+NAME_BASICS <- NAME_BASICS |> 
+    filter(str_count(knownForTitles, ",") > 1)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+As we can see in the following histogram, IMDb contains a long tail of not well known movies:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+#| label: 'title_ratings_tail'
+TITLE_RATINGS |>
+    ggplot(aes(x=numVotes)) + 
+    geom_histogram(bins=30) +
+    xlab("Number of IMDB Ratings") + 
+    ylab("Number of Titles") + 
+    ggtitle("Majority of IMDB Titles Have Less than 100 Ratings") + 
+    theme_bw() + 
+    scale_x_log10(label=scales::comma) + 
+    scale_y_continuous(label=scales::comma)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+To improve computer efficiency, any title with less than 100 ratings will be removed. As seen in the following table, this action drops around 75% of the data set:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+#| label: 'title_ratings_quantile'
+TITLE_RATINGS |>
+    pull(numVotes) |>
+    quantile()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+By applying the following code, we significantly reduce the size of the data set:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+#| label: 'title_ratings_filter'
+#| cache: true
+TITLE_RATINGS <- TITLE_RATINGS |>
+    filter(numVotes >= 100)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The same filtering will be applied to the other `TITLE_*` tables. In the following case, the [`semi_join`](https://dplyr.tidyverse.org/reference/filter-joins.html) is used. The `semi_join` returns only values which have a match, but doesn't add columns.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+#| cache: true
+#| label: 'title_other_filter'
+#| message: false
+TITLE_BASICS <- TITLE_BASICS |>
+    semi_join(TITLE_RATINGS, 
+              join_by(tconst == tconst))
+
+TITLE_CREW <- TITLE_CREW |>
+    semi_join(TITLE_RATINGS, 
+              join_by(tconst == tconst))
+
+TITLE_EPISODES_1 <- TITLE_EPISODES |>
+    semi_join(TITLE_RATINGS, 
+              join_by(tconst == tconst))
+TITLE_EPISODES_2 <- TITLE_EPISODES |>
+    semi_join(TITLE_RATINGS, 
+              join_by(parentTconst == tconst))
+
+TITLE_EPISODES <- bind_rows(TITLE_EPISODES_1,
+                            TITLE_EPISODES_2) |>
+    distinct()
+
+TITLE_PRINCIPALS <- TITLE_PRINCIPALS |>
+  semi_join(TITLE_RATINGS, join_by(tconst == tconst))
+
+
+rm(TITLE_EPISODES_1)
+rm(TITLE_EPISODES_2)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+At this point, the data has been filtered down *significantly*. Now, the analysis process can be started.
+
+### Initial Exploration
+
+We will start examining our data more closely.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r, results='hide'}
+print("NAME_BASICS TABLE")
+glimpse(NAME_BASICS)
+
+print("TITLE_BASICS TABLE")
+glimpse(TITLE_BASICS)
+
+print("TITLE_CREW TABLE")
+glimpse(TITLE_CREW)
+
+print("TITLE_EPISODES TABLE")
+glimpse(TITLE_EPISODES)
+
+print("TITLE_PRINCIPALS TABLE")
+glimpse(TITLE_PRINCIPALS)
+
+print("TITLE_RATINGS TABLE")
+glimpse(TITLE_RATINGS)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+::: callout-tip
+#### Task 1: Column Type Correction (Instructor-Provided)
+
+Correct the column types of the `TITLE` tables using a combination of `mutate` and the coercion functions `as.numeric` and `as.logical`.
+:::
+
+### Task 1: Column Type Correction
+
+The use of the `glimpse` function above allows us to examine each table. We can see that many columns appear to be read as *character* (string) vectors, even when they should be read as *numeric*, or *numeric* when they should be read as *logical*. This could occur because missing values are represented as `\\N` or other non numeric values. Since `R` does not know that these are `NA` values, it retains them as strings.
+
+To fix these, we will use the `mutate` command, and the `as.numeric` or `as.logical` command to change column type as follows:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r, warning=FALSE, results='hide'}
+NAME_BASICS <- NAME_BASICS |>
+    mutate(birthYear = as.numeric(birthYear),
+           deathYear = as.numeric(deathYear))
+
+print("NAME_BASICS TABLE")
+glimpse(NAME_BASICS)
+
+TITLE_BASICS <- TITLE_BASICS |>
+    mutate(startYear = as.numeric(startYear),
+           endYear = as.numeric(endYear),
+           runtimeMinutes = as.numeric(runtimeMinutes),
+           isAdult = as.logical(isAdult))
+print("TITLE_BASICS TABLE")
+glimpse(TITLE_BASICS)
+
+
+TITLE_EPISODES <- TITLE_EPISODES |>
+    mutate(seasonNumber = as.numeric(seasonNumber),
+           episodeNumber = as.numeric(episodeNumber))
+
+print("TITLE_EPISODES TABLE")
+glimpse(TITLE_EPISODES)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Another aspect of this data that we would like to address is that it combines multiple pieces of information in a single cell separated by commas. We see this in the `NAME_BASICS` table, where both the `primaryProfession` and `knownForTitles` columns combine multiple values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+glimpse(NAME_BASICS)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+We can use the `separate_longer_delim` function to break these into multiple rows: for example
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+#| label: 'separate_longer_delim_example'
+#| cache: true
+NAME_BASICS |> separate_longer_delim(knownForTitles, ",") |> slice_head(n=10)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+To preserve flexibility, we will not fully separate `NAME_BASICS` just yet, but we will need to use `separate_longer_delim` to answer various questions.
+
+## Task 2: Instructor-Provided Questions
+
+### Task 2 Question 1
+
+1.  How many movies are in our data set? How many TV series? How many TV episodes?
+
+To answer these questions, we will be grouping our TITLE_BASICS table by title type to count how many titles of each type there are, and then we will be filtering by the specific title type we are asked to provide. Please see code and output below:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+TITLE_BASICS |>
+  group_by(titleType) |>
+  summarise(count = n()) |>
+  filter(titleType == "movie" | titleType == "tvSeries" | titleType == "tvEpisode")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+From the table obtained, we can see that there are many more movies and TV Episodes than TV Series.
+
+### Task 2 Question 2
+
+2.  Who is the oldest living person in our data set?
+
+Given the data include Hollywood personalities with birth year but no death year, I will filter by those born after 1904.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+
+current_year <- year(Sys.Date())
+
+oldest_living_person <- NAME_BASICS |>
+  filter(birthYear > 1904, is.na(deathYear)) |>
+  arrange(birthYear) |>
+  head(5) |>
+  mutate(age = current_year - birthYear)
+
+
+oldest_living_person
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Based on the results, and the data that we have, we cannot definitely determine who is the oldest person alive in our data set. In the same way there are individuals in our data born in 1625 with no death year, the output received could include deceased individuals with no death year available but who are deceased. If for grading purposes I must chose one, I would say Julio Abadía is the oldest living person in our data set. [Julio Abadía](https://www.imdb.com/name/nm0007643/?ref_=nv_sr_srsg_0_tt_0_nm_8_in_0_q_julio%2520abadia) was born in Bogota Colombia, and is known for [La Rosa de Francia](https://www.imdb.com/title/tt0028204/?ref_=nm_flmg_knf_c_1).
+
+### Task 2 Question 3
+
+3.  There is one TV Episode in this data set with a perfect 10/10 rating and at least 200,000 IMDb ratings. What is it? What series does it belong to?
+
+The TV Episode with a perfect 10/10 rating and at least 200,000 votes is ***Ozymandias***. To find this, I fully joined three tables and filtered by the parameters provided. To find which series Ozymandias belongs to, I created a column that matches the tconst of the parent to the tconst in the TITLE_BASICS table and returns the title. Thus, we can see that Ozymandias belongs to the series ***Breaking Bad***.
+
+At this point, we take note of the genres, which could give us some insight into which genra we could do a new production on.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+TITLE_BASICS_RATINGS_EPISODES <- full_join(TITLE_BASICS, TITLE_RATINGS, join_by(tconst)) |> full_join(TITLE_EPISODES, join_by(tconst))
+
+TITLE_BASICS_RATINGS_EPISODES |> 
+  filter(titleType == "tvEpisode", averageRating == 10, numVotes >= 200000) |>
+  mutate(parentTitle = TITLE_BASICS$originalTitle[match(parentTconst, TITLE_BASICS$tconst)]) |>
+  select(-c(tconst, isAdult, endYear, primaryTitle)) |>
+  head()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Task 2 Question 4
+
+4.  What four projects is the actor Mark Hamill most known for?
+
+The actor Mark Hamill is most known for the four Star Wars projects listed below.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+
+#Expand the knownForTitles values into rows with a single title. I am doing this in order to match each title with its name
+NAME_BASICS <- NAME_BASICS |>
+  separate_longer_delim(col = knownForTitles, delim = ",")
+
+
+#Now I can join the table above with another table containing the name of the titles. I am doing a left join to ensure I keep all data from the NAME_BASICS table regardless of there being a match or not
+NAME_TITLE_BASICS <- left_join(NAME_BASICS, TITLE_BASICS, join_by(knownForTitles == tconst))|>
+  rename(knownForTitle = knownForTitles)
+
+#Now, I use the newly created table to answer the question (I asked the system to give me 20 results to ensure I am not missing any titles)
+NAME_TITLE_BASICS |> 
+  filter(primaryName == "Mark Hamill") |>
+  select(primaryName, titleType, originalTitle, knownForTitle, genres, startYear) |>
+  head(20)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+It is interesting to see that this actor is know for four related projects (Star Wars) and that the start year of these projects span across multiple time periods.
+
+### Task 2 Question 5
+
+5.  What TV series, with more than 12 episodes, has the highest *average* rating?
+
+The TV series with more than 12 episodes and the highest average rating is ***20 Dakika***.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+
+Episodes_Basics_Ratings <- full_join(TITLE_EPISODES, TITLE_BASICS, join_by(tconst == tconst)) |>
+  full_join(TITLE_RATINGS, join_by(tconst == tconst)) |>
+  mutate(parentTitle = TITLE_BASICS$originalTitle[match(parentTconst, TITLE_BASICS$tconst)])
+
+Episodes_Basics_Ratings |>
+  group_by(parentTconst) |>
+  summarise(
+    Average_Rating = mean(averageRating, na.rm = TRUE),
+    Total_Episodes = n(),
+    Average_Votes = mean(numVotes)
+  ) |>
+  filter(Total_Episodes > 12, Average_Votes >= 300) |>
+  arrange(desc(Average_Rating)) |>
+  mutate(parentTitle = TITLE_BASICS$originalTitle[match(parentTconst, TITLE_BASICS$tconst)]) |>
+  ungroup()
+
+#Styled with Style add in
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Lets examine the this TV series more closely.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+TITLE_BASICS_RATINGS_EPISODES |>
+  filter(parentTconst == "tt2544148") |>
+  select(-c(endYear,tconst, originalTitle))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+From the above, we can see that the genres are Action, Drama, and Romance. Furthermore, the start year was 2013, which is not that old. This could indicate that contemporary audience is receptive to this kind of genre combination.
+
+### Task 2 Question 6
+
+6.  The TV series *Happy Days* (1974-1984) gives us the common idiom ["jump the shark"](https://en.wikipedia.org/wiki/Jumping_the_shark). The phrase comes from a controversial fifth season episode (aired in 1977) in which a lead character literally jumped over a shark on water skis. Idiomatically, it is used to refer to the moment when a once-great show becomes ridiculous and rapidly looses quality.
+
+    Is it true that episodes from later seasons of *Happy Days* have lower average ratings than the early seasons?
+
+Let us start by looking at the average ratings per season and the average number of votes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+
+Episodes_Basics_Ratings |>
+  filter(titleType == "tvEpisode", parentTitle == "Happy Days") |>
+  group_by(seasonNumber) |>
+  summarise(Average_Rating = mean(averageRating, na.rm = TRUE),
+            Total_Episodes = n(),
+            Average_Votes = mean(numVotes)) |>
+    ungroup()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+From the table, we can clearly see that the average number of votes declined as seasons passed. To better visualize the relationship between the ratings and seasons we will create a linear model
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+
+#Name data to be inputted into the linear model
+Happy_Days_Data <- Episodes_Basics_Ratings |>
+  filter(titleType == "tvEpisode", parentTitle == "Happy Days") |>
+  group_by(seasonNumber) |>
+  summarise(Average_Rating = mean(averageRating, na.rm = TRUE),
+            Total_Episodes = n(),
+            Average_Votes = mean(numVotes)) |>
+    ungroup()
+
+#Create linear model
+linear_model <- lm(Average_Rating ~ seasonNumber, data = Happy_Days_Data)
+
+# Create graph
+if(!require("ggpmisc")) install.packages("ggpmisc")
+library(ggpmisc)
+ggplot(Happy_Days_Data, aes(x = seasonNumber, y = Average_Rating)) +
+  geom_point() +
+  stat_poly_line(se=FALSE, color="black") +
+  labs(
+    title = "Happy Days: Average Rating by Season",
+    x = "Season Number",
+    y = "Average Rating"
+  ) +
+  theme_classic()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+From the graph above, we see that episodes from later seasons of *Happy Days* have lower average ratings than the early seasons. However, as we saw initially, lower ratings come from a smaller number of rating votes. This could reflect lost interest due to lower quality of the series, or from many in the audience replacing this show for another one.
+
+## Task 3: Instructor-Provided Questions
+
+In this section we will be creating a success metric. It will be derived solely on the data we have due to data licensing constraints.
+
+### Task 3
+
+Design a 'success' measure for IMDb entries, reflecting both quality and broad popular awareness. Implement your success metric using a `mutate` operator to add a new column to the `TITLE_RATINGS` table.
+
+Validate your success metric as follows (see task 3 questions and responses below).
+
+### Task 3 Question 1
+
+Choose the top 5-10 movies on your metric and confirm that they were indeed box office successes.
+
+### Task 3 Question 2
+
+Choose 3-5 movies with large numbers of IMDb votes that score poorly on your success metric and confirm that they are indeed of low quality.
+
+### Task 3 Question 3
+
+Choose a prestige actor or director and confirm that they have many projects with high scores on your success metric.
+
+### Task 3 Question 4
+
+Perform at least one other form of 'spot check' validation.
+
+### Task 3 Question 5
+
+Come up with a numerical threshold for a project to be a 'success'; that is, determine a value $v$ such that movies above $v$ are all "solid" or better.
+
+You will use your success metric and threshold to complete the rest of this Mini-Project. You may, if you wish, restrict your attention to movies for the remainder of your analysis, though a good development executive should also consider making TV series.
+
+### Examining Success by Genre and Decade
+
+Now that you have a working proxy for success, it's time to look at trends in success over time. Answer the following questions. Your responses should include at least 2 graphics.
+
+::: callout-tip
+#### Task 4: Trends in Success Over Time
+
+Using questions like the following, identify a good "genre" for your next film. You do not need to answer these questions precisely, but these are may help guide your thinking.
+
+1.  What was the genre with the most "successes" in each decade?
+2.  What genre consistently has the most "successes"? What genre used to reliably produced "successes" and has fallen out of favor?
+3.  What genre has produced the most "successes" since 2010? Does it have the highest success *rate* or does it only have a large number of successes because there are many productions in that genre?
+4.  What genre has become more popular in recent years?
+:::
+
+Based on your findings, select a genre for your next project. Note that you may wish to avoid an "oversatured" genre; you just need to make the argument that your proposal is a *good* investment, not necessarily the most *studio-produced focus-grouped committee-designed generic satisfying* choice, so feel free to lean in to your own artistic preferences, as long as you can make an argument for them.
+
+### Successful Personnel in the Genre
+
+Now that you have selected a target genre, identify two actors and one director who will anchor your project. You want to identify key personnel who have worked in the genre before, with at least modest success, and who have at least one major success to their credit.
+
+As you develop your team, you may want to consider the following possibilities:
+
+-   An older established actor and an up-and-coming actor
+-   An actor/director pair who have been successful together
+-   An actor/director pair who are both highly successful but have never worked together
+-   A pair of established actors who have had success in many genres
+
+As you select your key personnel, consider what IMDb says they are known for; this will be useful in developing your marketing materials.
+
+::: callout-tip
+#### Task 5: Key Personnel
+
+Identify (at least) two actors and one director who you will target as the key talent for your movie. Write a short "pitch" as to why they are likely to be successful. You should support your pitch with at least one graphic and one table.
+:::
+
+### Nostalgia and Remakes
+
+Now that you have found a target genre and key talent for your project, you need a story. Like any good development executive, your first instinct should be to produce a remake of a classic film in the genre.
+
+::: callout-tip
+#### Task 6: Finding a Classic Movie to Remake
+
+Find a classic movie to remake with your key talent. The original should have a large number of IMDb ratings, a high average rating, and not have been remade in the past 25 years.[^2]
+
+Once you have found your classic movie to remake, confirm whether key actors, directors, or writers from the original are still alive. If so, you need to contact your legal department to ensure they can secure the rights to the project. You may also want to include the classic actors as "fan service."
+:::
+
+[^2]: In order to see that a movie has not been recently remade, it is sufficient to confirm that no movie has been made with the same name in the past 25 years.
+
+## Putting It Together
+
+::: callout-tip
+#### Task 7: Write and Deliver Your Pitch
+
+Now that you have completed your analysis, write an "elevator pitch" of approximately 200-250 words for your proposed Hollywood project. This is the pitch you will bring to the studio head (your boss); if the studio head likes your pitch, you will be given a small sum of money to start securing the story rights and locking down tentative deals with key talent.
+
+Your pitch needs to synthesize the analysis above into two to three quick and compelling points. (*E.g.*, "The market for animated young adult horror musicals has grown 200% in the past decade" or "Over 90% of Director D's movies are successes.") You need to present the strongest argument for each element of your pitch, including genre, director, actors, and story.
+
+If your boss approves the pitch, you will need to have a brief trailer ready for the next quarterly earnings call. The marketing department has asked that you prepare a classic 90's style teaser for them. Adapt the following cliched formula for your pitch.
+
+> From director D, the visionary mind between N1; and From actor A, beloved star of N2; and From actor A2, Hollywood icon of genre G, Comes the timeless tail N3 A story of TOPIC, TOPIC, and TOPIC Coming soon to a theater near you.
+
+If you're creatively-minded, you could have some fun here using Generative tools to draft a script or mock up a movie poster for your pitch.
+:::
+
+## General Remarks
+
+As you approach this project, recall there are no right or wrong answers. You are exploring data looking for *exciting* and *actionable* findings. You have several key decisions to make and you can support them with data, but the decisions are ultimately yours. This project is an exercise both in the "nuts-and-bolts" of analyzing a large data set and in using data to inform and refine what is ultimately still a "gut feeling" qualitative business decision.
+
+------------------------------------------------------------------------
+
+Credits to [Michael Weylandt](https://michael-weylandt.com) who provided a great part of the code for the data gathering and cleaning process.
+

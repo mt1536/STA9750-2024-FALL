@@ -77,6 +77,7 @@ TITLE_CREW       <- get_imdb_file("title.crew")
 #| warning: false
 #| cache: false
 TITLE_PRINCIPALS <- get_imdb_file("title.principals")
+
 ```
 
 ### Data Sub-Sampling
@@ -150,7 +151,9 @@ TITLE_EPISODES <- bind_rows(TITLE_EPISODES_1,
                             TITLE_EPISODES_2) |>
     distinct()
 
-if (exists("TITLE_PRINCIPALS")) { TITLE_PRINCIPALS <- TITLE_PRINCIPALS |> semi_join(TITLE_RATINGS, join_by(tconst == tconst)) } else { stop("TITLE_PRINCIPALS is not defined.") }
+TITLE_PRINCIPALS <- TITLE_PRINCIPALS |>
+  semi_join(TITLE_RATINGS, join_by(tconst == tconst))
+
 
 rm(TITLE_EPISODES_1)
 rm(TITLE_EPISODES_2)
@@ -160,35 +163,59 @@ At this point, the data has been filtered down *significantly*. Now, the analysi
 
 ### Initial Exploration
 
-At this point, let's start examining our data more closely. Use the `glimpse` function to examine each table, taking care to note the *type* or *mode* of each column. For this data set, most columns appear to be read in as *character* (string) vectors, even when they should be numeric. This can occur when "null" values are represented in some non-standard way. For instance, in these files, we see that missing values are represented as `\\N`. `R` does not know that these are `NA` values and so retains them as strings.[^2]
-
-[^2]: Recall that *strings* can contain essentially any data type and so are a safe fall-back. For instance, a column containing `1` and `a` can be losslessly represented by the string vector `c("1", "a")` but coercion to the numeric vector `c(1, NA)` is lossy. `R` tries very hard not to destroy any information and so it doesn't perform this conversion for us unless we explicitly request it.
-
-To fix this, we need to use:
-
-1.  the `mutate` command, since we're changing the type of a column
-2.  the `as.numeric` command to change the type of the column.
-
-We can clean the `NAMES_BASIC` command as follows:
+We will start examining our data more closely.
 
 ```{r}
-if (exists("TITLE_PRINCIPALS")) {
-glimpse(TITLE_PRINCIPALS) } else { print("TITLE_PRINCIPALS does not exist.") }
+
+print("NAME_BASICS TABLE")
+glimpse(NAME_BASICS, width = 100, max.extra.cols = Inf)
+
+print("TITLE_BASICS TABLE")
+glimpse(TITLE_BASICS, width = 100, max.extra.cols = Inf)
+
+print("TITLE_CREW TABLE")
+glimpse(TITLE_CREW, width = 100, max.extra.cols = Inf)
+
+print("TITLE_EPISODES TABLE")
+glimpse(TITLE_EPISODES, width = 100, max.extra.cols = Inf)
+
+print("TITLE_PRINCIPALS TABLE")
+glimpse(TITLE_PRINCIPALS, width = 100, max.extra.cols = Inf)
+
+print("TITLE_RATINGS TABLE")
+glimpse(TITLE_RATINGS, width = 100, max.extra.cols = Inf)
+
 ```
 
-```{r, warning=FALSE}
+## Task 1: Column Type Correction (Instructor-Provided)
+
+Correct the column types of the `TITLE` tables using a combination of `mutate` and the coercion functions `as.numeric` and `as.logical`.
+
+### Task 1: Column Type Correction
+
+The use of the `glimpse` function above allows us to examine each table. We can see that many columns appear to be read as *character* (string) vectors, even when they should be read as *numeric*, or *numeric* when they should be read as *logical*. This could occur because missing values are represented as `\\N` or other non numeric values. Since `R` does not know that these are `NA` values, it retains them as strings.
+
+To fix these, we will use the `mutate` command, and the `as.numeric` or `as.logical` command to change column type as follows:
+
+```{r, warning=FALSE, results='hide'}
 NAME_BASICS <- NAME_BASICS |>
     mutate(birthYear = as.numeric(birthYear),
            deathYear = as.numeric(deathYear))
+
+TITLE_BASICS <- TITLE_BASICS |>
+    mutate(startYear = as.numeric(startYear),
+           endYear = as.numeric(endYear),
+           runtimeMinutes = as.numeric(runtimeMinutes),
+           isAdult = as.logical(isAdult))
+
+
+TITLE_EPISODES <- TITLE_EPISODES |>
+    mutate(seasonNumber = as.numeric(seasonNumber),
+           episodeNumber = as.numeric(episodeNumber))
+
 ```
 
-::: callout-tip
-#### Task 1: Column Type Correction
-
-Correct the column types of the `TITLE` tables using a combination of `mutate` and the coercion functions `as.numeric` and `as.logical`.
-:::
-
-Another non-tidy aspect of this data is that it combines multiple pieces of information in a single cell separated by commas. We already saw a bit of this in the `NAME_BASICS` table, where both the `primaryProfession` and `knownForTitles` columns combine multiple values.
+Another aspect of this data that we would like to address is that it combines multiple pieces of information in a single cell separated by commas. We see this in the `NAME_BASICS` table, where both the `primaryProfession` and `knownForTitles` columns combine multiple values.
 
 ```{r}
 glimpse(NAME_BASICS)
@@ -197,75 +224,511 @@ glimpse(NAME_BASICS)
 We can use the `separate_longer_delim` function to break these into multiple rows: for example
 
 ```{r}
-#| label: 'seaprate_longer_delim_example'
+#| label: 'separate_longer_delim_example'
 #| cache: true
-NAME_BASICS |> separate_longer_delim(knownForTitles, ",") |> slice_head(n=10)
+NAME_BASICS |> separate_longer_delim(knownForTitles, ",") |> slice_head(n = 10) |> glimpse(width = 100, max.extra.cols = Inf)
+
 ```
 
-To preserve flexibility, let's not fully separate `NAME_BASICS` just yet, but you will need to use `separate_longer_delim` to answer various questions.
+To preserve flexibility, we will not fully separate `NAME_BASICS` just yet, but we will need to use `separate_longer_delim` to answer various questions.
 
-Using your knowledge of `dplyr` functionality, answer the following questions
+## Task 2: Instructor-Provided Questions
 
-::: callout-tip
-#### Task 2: Instructor-Provided Questions
+### Task 2 Question 1
 
 1.  How many movies are in our data set? How many TV series? How many TV episodes?
 
+To answer these questions, we will be grouping our TITLE_BASICS table by title type to count how many titles of each type there are, and then we will be filtering by the specific title type we are asked to provide. Please see code and output below:
+
+```{r}
+TITLE_BASICS |>
+  group_by(titleType) |>
+  summarise(count = n()) |>
+  filter(titleType == "movie" | titleType == "tvSeries" | titleType == "tvEpisode")
+
+
+```
+
+From the table obtained, we can see that there are many more movies and TV Episodes than TV Series.
+
+### Task 2 Question 2
+
 2.  Who is the oldest living person in our data set?
+
+Given the data include Hollywood personalities with birth year but no death year, I will filter by those born after 1904.
+
+```{r}
+
+current_year <- year(Sys.Date())
+
+oldest_living_person <- NAME_BASICS |>
+  filter(birthYear > 1904, is.na(deathYear)) |>
+  arrange(birthYear) |>
+  head(5) |>
+  mutate(age = current_year - birthYear) |>
+  glimpse(width = 100, max.extra.cols = Inf)
+
+
+
+
+oldest_living_person
+
+```
+
+Based on the results, and the data that we have, we cannot definitely determine who is the oldest person alive in our data set. In the same way there are individuals in our data born in 1625 with no death year, the output received could include deceased individuals with no death year available but who are deceased. If for grading purposes I must chose one, I would say Julio Abadía is the oldest living person in our data set. [Julio Abadía](https://www.imdb.com/name/nm0007643/?ref_=nv_sr_srsg_0_tt_0_nm_8_in_0_q_julio%2520abadia) was born in Bogota Colombia, and is known for [La Rosa de Francia](https://www.imdb.com/title/tt0028204/?ref_=nm_flmg_knf_c_1).
+
+### Task 2 Question 3
 
 3.  There is one TV Episode in this data set with a perfect 10/10 rating and at least 200,000 IMDb ratings. What is it? What series does it belong to?
 
+The TV Episode with a perfect 10/10 rating and at least 200,000 votes is ***Ozymandias***. To find this, I fully joined three tables and filtered by the parameters provided. To find which series Ozymandias belongs to, I created a column that matches the tconst of the parent to the tconst in the TITLE_BASICS table and returns the title. Thus, we can see that Ozymandias belongs to the series ***Breaking Bad***.
+
+At this point, we take note of the genres, which could give us some insight into which genra we could do a new production on.
+
+```{r}
+TITLE_BASICS_RATINGS_EPISODES <- full_join(TITLE_BASICS, TITLE_RATINGS, join_by(tconst)) |> full_join(TITLE_EPISODES, join_by(tconst))
+
+TITLE_BASICS_RATINGS_EPISODES |> 
+  filter(titleType == "tvEpisode", averageRating == 10, numVotes >= 200000) |>
+  mutate(parentTitle = TITLE_BASICS$originalTitle[match(parentTconst, TITLE_BASICS$tconst)]) |>
+  select(-c(tconst, isAdult, endYear, primaryTitle)) |>
+  head() |>
+  glimpse(width = 100, max.extra.cols = Inf)
+
+
+```
+
+### Task 2 Question 4
+
 4.  What four projects is the actor Mark Hamill most known for?
 
+The actor Mark Hamill is most known for the four Star Wars projects listed below.
+
+```{r}
+
+#Expand the knownForTitles values into rows with a single title. I am doing this in order to match each title with its name
+NAME_BASICS <- NAME_BASICS |>
+  separate_longer_delim(col = knownForTitles, delim = ",")
+
+
+#Now I can join the table above with another table containing the name of the titles. I am doing a left join to ensure I keep all data from the NAME_BASICS table regardless of there being a match or not
+NAME_TITLE_BASICS <- left_join(NAME_BASICS, TITLE_BASICS, join_by(knownForTitles == tconst)) |>
+  rename(knownForTitle = knownForTitles)
+
+#Now, I use the newly created table to answer the question (I asked the system to give me 20 results to ensure I am not missing any titles)
+NAME_TITLE_BASICS |> 
+  filter(primaryName == "Mark Hamill") |>
+  select(primaryName, titleType, originalTitle, knownForTitle, genres, startYear) |>
+  head(20) |>
+  glimpse(width = 100, max.extra.cols = Inf)
+
+
+```
+
+It is interesting to see that this actor is know for four related projects (Star Wars) and that the start year of these projects span across multiple time periods.
+
+### Task 2 Question 5
+
 5.  What TV series, with more than 12 episodes, has the highest *average* rating?
+
+The TV series with more than 12 episodes and the highest average rating is ***20 Dakika***.
+
+```{r}
+
+Episodes_Basics_Ratings <- full_join(TITLE_EPISODES, TITLE_BASICS, join_by(tconst == tconst)) |>
+  full_join(TITLE_RATINGS, join_by(tconst == tconst)) |>
+  mutate(parentTitle = TITLE_BASICS$originalTitle[match(parentTconst, TITLE_BASICS$tconst)])
+
+Episodes_Basics_Ratings |>
+  group_by(parentTconst) |>
+  summarise(
+    Average_Rating = mean(averageRating, na.rm = TRUE),
+    Total_Episodes = n(),
+    Average_Votes = mean(numVotes)
+  ) |>
+  filter(Total_Episodes > 12, Average_Votes >= 300) |>
+  arrange(desc(Average_Rating)) |>
+  mutate(parentTitle = TITLE_BASICS$originalTitle[match(parentTconst, TITLE_BASICS$tconst)]) |>
+  ungroup()
+
+```
+
+Lets examine the this TV series more closely.
+
+```{r}
+TITLE_BASICS_RATINGS_EPISODES |>
+  filter(parentTconst == "tt2544148") |>
+  select(-c(endYear,tconst, originalTitle)) |>
+  glimpse(width = 100, max.extra.cols = Inf)
+
+```
+
+From the above, we can see that the genres are Action, Drama, and Romance. Furthermore, the start year was 2013, which is not that old. This could indicate that contemporary audience is receptive to this kind of genre combination.
+
+### Task 2 Question 6
 
 6.  The TV series *Happy Days* (1974-1984) gives us the common idiom ["jump the shark"](https://en.wikipedia.org/wiki/Jumping_the_shark). The phrase comes from a controversial fifth season episode (aired in 1977) in which a lead character literally jumped over a shark on water skis. Idiomatically, it is used to refer to the moment when a once-great show becomes ridiculous and rapidly looses quality.
 
     Is it true that episodes from later seasons of *Happy Days* have lower average ratings than the early seasons?
 
-*Hint:* It may be useful to create a "map" of which columns map to which tables before attempting these questions. While these can be [quite formal](https://duckduckgo.com/?q=sql+schema+map&iax=images&ia=images), even some basic sketches on a scratch piece of paper are often quite clarifying.
-:::
+Let us start by looking at the average ratings per season and the average number of votes.
 
-### Quantifying Success
+```{r}
 
-Our goal is to proposal successful new movies. To do so, we need a way of measuring the success of a movie given only IMDb ratings.[^3] While there's no "magic number" for success, it is logical to assume that a successful project will have both a high average IMDb rating, indicating quality, and a large number of ratings, indicating broad awareness in the public.
+Episodes_Basics_Ratings |>
+  filter(titleType == "tvEpisode", parentTitle == "Happy Days") |>
+  group_by(seasonNumber) |>
+  summarise(Average_Rating = mean(averageRating, na.rm = TRUE),
+            Total_Episodes = n(),
+            Average_Votes = mean(numVotes)) |>
+    ungroup()
+```
 
-[^3]: Sadly, I couldn't find permissively licensed movie box office data. If you are aware of some, please let me know!
+From the table, we can clearly see that the average number of votes declined as seasons passed. To better visualize the relationship between the ratings and seasons we will create a linear model
 
-::: callout-tip
-#### Task 3: Custom Success Metric
+```{r}
 
-Design a 'success' measure for IMDb entries, reflecting both quality and broad popular awareness. Implement your success metric using a `mutate` operator to add a new column to the `TITLE_RATINGS` table.
+#Name data to be inputted into the linear model
+Happy_Days_Data <- Episodes_Basics_Ratings |>
+  filter(titleType == "tvEpisode", parentTitle == "Happy Days") |>
+  group_by(seasonNumber) |>
+  summarise(Average_Rating = mean(averageRating, na.rm = TRUE),
+            Total_Episodes = n(),
+            Average_Votes = mean(numVotes)) |>
+    ungroup()
 
-Validate your success metric as follows:
+#Create linear model
+linear_model <- lm(Average_Rating ~ seasonNumber, data = Happy_Days_Data)
 
-1.  Choose the top 5-10 movies on your metric and confirm that they were indeed box office successes.
-2.  Choose 3-5 movies with large numbers of IMDb votes that score poorly on your success metric and confirm that they are indeed of low quality.
-3.  Choose a prestige actor or director and confirm that they have many projects with high scores on your success metric.
-4.  Perform at least one other form of 'spot check' validation.
-5.  Come up with a numerical threshold for a project to be a 'success'; that is, determine a value $v$ such that movies above $v$ are all "solid" or better.
-:::
+# Create graph
+if(!require("ggpmisc")) install.packages("ggpmisc")
+library(ggpmisc)
+ggplot(Happy_Days_Data, aes(x = seasonNumber, y = Average_Rating)) +
+  geom_point() +
+  stat_poly_line(se=FALSE, color="black") +
+  labs(
+    title = "Happy Days: Average Rating by Season",
+    x = "Season Number",
+    y = "Average Rating"
+  ) +
+  theme_classic()
+```
+
+From the graph above, we see that episodes from later seasons of *Happy Days* have lower average ratings than the early seasons. However, as we saw initially, lower ratings come from a smaller number of rating votes. This could reflect lost interest due to lower quality of the series, or from many in the audience replacing this show for another one.
+
+## Task 3: Instructor-Provided Questions
+
+In this section we will be creating a success metric. It will be derived solely on the data we have due to data licensing constraints.
+
+### Task 3
+
+Design a 'success' measure for IMDb entries, reflecting both quality and broad popular awareness. Implement your success metric using a `mutate` operator to add a new column to the `TITLE_RATINGS` table. Validate your success metric as follows (see task 3 questions and responses below).
+
+In order to create this measure, first I would like to see a how the number of votes for each title in our `TITLE_RATINGS` table are distributed. Remember we dropped titles with less than 100 ratings.
+
+```{r}
+TITLE_RATINGS |>
+    ggplot(aes(x=numVotes)) + 
+    geom_histogram(bins=30) +
+    xlab("Number of IMDB Ratings") + 
+    ylab("Number of Titles") + 
+    ggtitle("Majority of IMDB Titles Have Less than 100 Ratings") + 
+    theme_bw() + 
+    scale_x_log10(label=scales::comma) + 
+    scale_y_continuous(label=scales::comma)
+
+
+```
+
+Based on this data. I would like to create a measure that leverages the ratings provided by individuals, but weights the rating by the number of people who voted. Therefore, I will weight titles by the quantile of the number of votes because this would give the rating a sense of popular awareness.
+
+```{r}
+#| label: 'title_ratings_quantile'
+TITLE_RATINGS |>
+    pull(numVotes) |>
+    quantile()
+```
+
+Based on the table above, we create the weighted rating
+
+```{r}
+
+TITLE_RATINGS <- TITLE_RATINGS |>
+  mutate(quantile_weight = cut(numVotes,
+  breaks = quantile(numVotes,
+  probs = c(0, 0.25, 0.5, 0.75, 1)),
+  labels = c(0.25, 0.5, 0.75, 1)),
+  weighted_rating = averageRating * as.numeric(as.character(quantile_weight)))
+
+```
+
+### Task 3 Question 1
+
+Choose the top 5-10 movies on your metric and confirm that they were indeed box office successes.
+
+Yes, the movies were indeed box office successes.
+
+```{r}
+
+
+NEW_TITLE_RATINGS <- full_join(TITLE_RATINGS, TITLE_BASICS, join_by(tconst == tconst)) |>
+  full_join(TITLE_EPISODES, join_by(tconst == tconst)) |>
+  mutate(parentTitle = TITLE_BASICS$originalTitle[match(parentTconst, TITLE_BASICS$tconst)])
+
+NEW_TITLE_RATINGS |>
+  filter(titleType == "movie") |>
+  arrange(desc(weighted_rating)) |>
+  select(-parentTitle, -episodeNumber, -seasonNumber, -parentTconst, -isAdult, -tconst, quantile_weight, -averageRating, -endYear) |>
+  head(10)
+
+
+```
+
+### Task 3 Question 2
+
+Choose 3-5 movies with large numbers of IMDb votes that score poorly on your success metric and confirm that they are indeed of low quality.
+
+The following shows titles for which the maximum weight was applied and yet the rating was poor.
+
+```{r}
+NEW_TITLE_RATINGS |>
+  filter(titleType == "movie", quantile_weight == 1) |>
+  arrange(weighted_rating) |>
+  select(-parentTitle, -episodeNumber, -seasonNumber, -parentTconst, -isAdult, -tconst, quantile_weight, -averageRating, -endYear) |>
+  head(5)
+
+
+```
+
+### Task 3 Question 3
+
+Choose a prestige actor or director and confirm that they have many projects with high scores on your success metric.
+
+I chose `Leonardo DiCaprio`. The success metric aligns with the many projects with high scores in which he participated.
+
+```{r}
+
+NEW_TITLE_RATINGS <- NEW_TITLE_RATINGS |>
+  mutate(Individual_Name = TITLE_PRINCIPALS$primaryName[match(NEW_TITLE_RATINGS$nconst, TITLE_PRINCIPALS$nconst)])
+
+NEW_TITLE_RATINGS |>
+  filter(Individual_Name == "Leonardo DiCaprio") |>
+  arrange(desc(weighted_rating)) |>
+  select(-ordering,-averageRating,-tconst,-quantile_weight,-isAdult,-endYear,-originalTitle) |>
+  head(10)
+
+```
+
+### Task 3 Question 4
+
+Perform at least one other form of 'spot check' validation.
+
+The TV series `Mad Men` is considered by many (such as me and my friends) to be a masterpiece. The weighted rating correctly reflects this taking into consideration public awareness of the series.
+
+```{r}
+NEW_TITLE_RATINGS |>
+  filter(primaryTitle == "Mad Men") |>
+  arrange(desc(weighted_rating)) |>
+  select(
+    -ordering, -averageRating, -tconst, -isAdult, -endYear, -originalTitle, -parentTconst, -seasonNumber, -episodeNumber, -parentTitle) |>
+  head(1)
+```
+
+### Task 3 Question 5
+
+Come up with a numerical threshold for a project to be a 'success'; that is, determine a value $v$ such that movies above $v$ are all "solid" or better.
 
 You will use your success metric and threshold to complete the rest of this Mini-Project. You may, if you wish, restrict your attention to movies for the remainder of your analysis, though a good development executive should also consider making TV series.
 
-### Examining Success by Genre and Decade
+I consider that the success metric created will accurately show success of a title. Success, for the purposes of this project will be defined as having a ***weighted rating*** of at least 7.5. Remember that this takes into consideration public awareness. Therefore, titles with low public awareness will not be shown in our modified table.
+
+```{r}
+MODIFIED_TITLE_RATINGS <- NEW_TITLE_RATINGS |>
+  filter(weighted_rating >= 7.5)
+```
+
+## Examining Success by Genre and Decade:Instructor-Provided Questions
 
 Now that you have a working proxy for success, it's time to look at trends in success over time. Answer the following questions. Your responses should include at least 2 graphics.
 
-::: callout-tip
-#### Task 4: Trends in Success Over Time
+## Task 4: Trends in Success Over Time (Instructor-Provided Questions)
 
 Using questions like the following, identify a good "genre" for your next film. You do not need to answer these questions precisely, but these are may help guide your thinking.
 
-1.  What was the genre with the most "successes" in each decade?
-2.  What genre consistently has the most "successes"? What genre used to reliably produced "successes" and has fallen out of favor?
-3.  What genre has produced the most "successes" since 2010? Does it have the highest success *rate* or does it only have a large number of successes because there are many productions in that genre?
-4.  What genre has become more popular in recent years?
-:::
+### Task 4 Question 1
+
+What was the genre with the most "successes" in each decade?
+
+To answer this question I will look at each genre separately and then together with its other related genres.
+
+Let's look at successful individual genre per decade:
+
+```{r}
+MODIFIED_TITLE_RATINGS |>
+  distinct(parentTconst, .keep_all = TRUE) |>
+  separate_rows(genres, sep = ",") |>
+  mutate(
+    genres = trimws(genres),
+    decade = paste0(floor(startYear / 10) * 10, "-", floor(startYear / 10) * 10 + 9)
+  ) |>
+  group_by(decade, genres) |>
+  summarise(mean_weighted_rating = mean(weighted_rating), .groups = "drop") |>
+  group_by(decade) |>
+  slice_max(order_by = mean_weighted_rating, n = 1) |>
+  select(decade, genres, mean_weighted_rating) |>
+  ungroup()
+
+```
+
+The current decade's most successful genre is News with an average weighted rating of 9.5.
+
+### Task 4 Question 2
+
+What genre consistently has the most "successes"? What genre used to reliably produced "successes" and has fallen out of favor?
+
+`Drama` has consistently had the most success. Based on the graphs, the genres `Mistery` and `Romance` seem to be the ones in decline for a while. However, those have not many "successes" as compared to other genres. The genres with most successes seem to have a fairly stable variation of success.
+
+```{r}
+#| echo: true
+#| warning: false
+#| fig.width: 7
+#| fig.height: 6
+
+MODIFIED_TITLE_RATINGS |>
+  mutate(
+    parentTconst = ifelse(titleType == "tvSeries", parentTconst, tconst)
+  ) |>
+  distinct(parentTconst, .keep_all = TRUE) |>
+  separate_rows(genres, sep = ",") |>
+  mutate(
+    genres = trimws(genres)
+  ) |>
+  filter(startYear >= 2010) |>
+  group_by(startYear, genres) |>
+  summarise(title_count = n(), .groups = "drop") |>
+  ggplot(aes(x = startYear, weight = title_count)) +
+  geom_histogram(bins = 10, color = "black", fill = "black") +
+  facet_wrap(~ genres, scales = "free_x", shrink = TRUE, strip.position = "bottom") +
+  labs(title = "Title Count by Year and Genre", x = "Year", y = "Title Count") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 12, hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 8, family = "sans"),
+    strip.text = element_text(size = 10, face = "bold")
+  )
+
+
+```
+
+### Task 4 Question 3
+
+What genre has produced the most "successes" since 2010? Does it have the highest success *rate* or does it only have a large number of successes because there are many productions in that genre?
+
+`Drama` has produced the most "successes" since 2010. There are many productions in that genre the same way there are many productions in `Comedy`. However, `Comedy` does not show as much success as `Drama` despite being the closes to the number of productions as shown below. Therefore, I conclude that `Drama` does create the most "successes."
+
+The following table shows total "successes" per genre given our definition:
+
+```{r}
+MODIFIED_TITLE_RATINGS |>
+  mutate(parentTconst = ifelse(titleType == "tvSeries", parentTconst, tconst)) |>
+  distinct(parentTconst, .keep_all = TRUE) |>
+  separate_rows(genres, sep = ",") |>
+  mutate(genres = trimws(genres)) |>
+  filter(startYear >= 2010) |>
+  group_by(genres) |>
+  summarise(total_title_count = n()) |>
+  arrange(desc(total_title_count)) |>
+  ungroup()
+
+```
+
+The following table shows total title count by genre using our initial data (not taking our success measure into consideration):
+
+```{r}
+TITLE_BASICS |>
+  separate_rows(genres, sep = ",") |>
+  group_by(genres) |>
+  summarise(total_title_count = n()) |>
+  arrange(desc(total_title_count)) |>
+  ungroup()
+```
+
+The following histograms show total successful titles by genre since 2010:
+
+```{r}
+#| echo: true
+#| warning: false
+#| fig.width: 30
+#| fig.height: 20
+
+
+MODIFIED_TITLE_RATINGS |>
+  mutate(
+    parentTconst = ifelse(titleType == "tvSeries", parentTconst, tconst)
+  ) |>
+  distinct(parentTconst, .keep_all = TRUE) |>
+  separate_rows(genres, sep = ",") |>
+  mutate(
+    genres = trimws(genres)
+  ) |>
+  filter(startYear >= 2010) |>
+  group_by(startYear, genres) |>
+  summarise(title_count = n(), .groups = "drop") |>
+  ggplot(aes(x = startYear, weight = title_count)) +
+  geom_histogram(bins = 10, color = "black", fill = "black", orientation = "x") +
+  facet_wrap(~ genres, scales = "free_x", shrink = TRUE, strip.position = "bottom") +
+  labs(title = "Title Count by Year and Genre since 2010", x = "Year", y = "Title Count") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 18, hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12, family = "sans"),
+    strip.text = element_text(size = 14, face = "bold"),
+    panel.spacing = unit(2, "cm")
+  )
+
+
+```
+
+### Task 4 Question 4
+
+What genre has become more popular in recent years?
 
 Based on your findings, select a genre for your next project. Note that you may wish to avoid an "oversatured" genre; you just need to make the argument that your proposal is a *good* investment, not necessarily the most *studio-produced focus-grouped committee-designed generic satisfying* choice, so feel free to lean in to your own artistic preferences, as long as you can make an argument for them.
 
-### Successful Personnel in the Genre
+As we have seen in the graph above, and as we see in the graph below, `Drama` has been and is becoming more popular in recent years. For this reason, I will propose the `Drama` genre. Some might think this is an over saturated genre. However, based on the data and graphs we previously saw, it seems that the great amount of supply of `Drama` titles is driven by consumer demand.
+
+```{r}
+#| echo: true
+#| warning: false
+#| fig.width: 15
+#| fig.height: 8
+
+MODIFIED_TITLE_RATINGS |>
+  distinct(parentTconst, .keep_all = TRUE) |>
+  separate_rows(genres, sep = ",") |>
+  mutate(
+    genres = trimws(genres)
+  ) |>
+  filter(startYear >= 2010) |>
+  group_by(startYear, genres) |>
+  summarise(mean_weighted_rating = mean(weighted_rating), .groups = "drop") |>
+  ggplot(aes(x = factor(startYear), y = mean_weighted_rating)) +
+  geom_point() +
+  labs(title = "Mean Weighted Rating by Year (Since 2010)") +
+  theme_bw() +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 8, family = "sans"),
+    plot.title = element_text(size = 12, hjust = 0.5),
+    axis.labels = element_blank(),
+    strip.text = element_text(size = 10, face = "bold")
+  ) +
+  facet_wrap(~ genres, scales = "free_y", labeller = labeller(genres = label_wrap_gen()))
+
+```
+
+## Successful Personnel in the Genre: Instructor-Provided Questions
 
 Now that you have selected a target genre, identify two actors and one director who will anchor your project. You want to identify key personnel who have worked in the genre before, with at least modest success, and who have at least one major success to their credit.
 
@@ -278,30 +741,163 @@ As you develop your team, you may want to consider the following possibilities:
 
 As you select your key personnel, consider what IMDb says they are known for; this will be useful in developing your marketing materials.
 
-::: callout-tip
-#### Task 5: Key Personnel
+## Task 5: Key Personnel: Instructor-Provided Questions
 
 Identify (at least) two actors and one director who you will target as the key talent for your movie. Write a short "pitch" as to why they are likely to be successful. You should support your pitch with at least one graphic and one table.
-:::
 
-### Nostalgia and Remakes
+### Task 5: Key Personnel
+
+I chose: Storm Reid as the young actress, Richard Schiff as the experienced actor, and Daniel Attias as the experienced director.
+
+Finding a young actor (born after 2000) with experience and sucess:
+
+```{r}
+#| warning: false
+
+successful_young_actor <- NEW_TITLE_RATINGS_WITH_BIRTHYEAR |>
+  filter(genres == "Drama", 
+         !is.na(nconst), 
+         !is.na(Individual_Name),
+         birthYear > 2000) |>
+  group_by(nconst, Individual_Name, birthYear, weighted_rating) |>
+  summarise(mean_weighted_rating = mean(weighted_rating)) |>
+  arrange(desc(mean_weighted_rating)) 
+
+successful_young_actor |> head(10)
+```
+
+Finding an experienced actor:
+
+```{r}
+#| warning: false
+most_experienced_actor <- NEW_TITLE_RATINGS |>
+  filter(genres == "Drama", !is.na(nconst), !is.na(Individual_Name)) |>
+  group_by(nconst, Individual_Name) |>
+  summarise(title_count = n()) |>
+  arrange(desc(title_count))
+
+most_experienced_actor |>
+  head(10)
+
+```
+
+Richar Schiff's age is 69 and has been part of 285 titles
+
+```{r}
+
+richard_schiff_YOB<-NAME_BASICS |>
+  filter(primaryName == "Richard Schiff") |>
+  pull(birthYear) |>
+  first()
+
+sum(2024-richard_schiff_YOB)
+
+
+```
+
+Finding an experienced director:
+
+```{r}
+#| warning: false
+most_experienced_director <- NEW_TITLE_RATINGS_WITH_BIRTHYEAR |>
+  filter(genres == "Drama", job == "director", !is.na(nconst), !is.na(Individual_Name), !is.na(job)) |>
+  group_by(nconst, Individual_Name) |>
+  summarise(title_count = n()) |>
+  arrange(desc(title_count))
+
+most_experienced_director |>
+  head(10)
+
+
+```
+
+Daniel Attias has been involved in 52 titles.
+
+The tables above show successful individuals in the `Drama` genre. They are part of the data that made the cut for our definition of success. And all of them have a lot of experience. Even the young actress, is one of the most experienced out of the filtered group. As we can see in the following graph, this makes a great team which displays experience and quality. Although Storm Reid has less experience than the rest of the team, she is a young actress with a continually increasing rated titles.
+
+```{r}
+
+THE_TEAM <- NEW_TITLE_RATINGS_WITH_BIRTHYEAR |>
+filter(Individual_Name %in% c("Storm Reid", "Richard Schiff", "Daniel Attias"))
+
+SUMMARY_THE_TEAM <- THE_TEAM |>
+group_by(Individual_Name, startYear) |>
+summarise(rating = mean(weighted_rating, na.rm = TRUE))
+
+ggplot(SUMMARY_THE_TEAM, aes(x = factor(startYear), y = rating)) +
+geom_bar(stat = "identity") +
+labs(title = "Average Ratings Across Years",
+subtitle = "Storm Reid, Richard Schiff, Daniel Attias",
+x = "Year",
+y = "Average Rating") +
+theme_classic() +
+theme(axis.text.x = element_blank(),
+axis.ticks.x = element_blank()) +
+facet_wrap(~ Individual_Name)
+
+
+```
+
+Below, we can see what title in the `Drama` genre they are known for:
+
+```{r}
+TITLE_PRINCIPALS |>
+  filter(primaryName %in% c("Storm Reid", "Richard Schiff", "Daniel Attias")) |>
+  left_join(TITLE_BASICS, by = c("tconst" = "tconst")) |>
+  mutate(KnownForTitleName = primaryTitle) |>
+  filter(genres == "Drama") |>
+  distinct(primaryName, .keep_all = TRUE)
+
+```
+
+## Nostalgia and Remakes: Instructor-Provided Questions
 
 Now that you have found a target genre and key talent for your project, you need a story. Like any good development executive, your first instinct should be to produce a remake of a classic film in the genre.
 
-::: callout-tip
-#### Task 6: Finding a Classic Movie to Remake
+## Task 6: Finding a Classic Movie to Remake: Instructor-Provided Questions
 
-Find a classic movie to remake with your key talent. The original should have a large number of IMDb ratings, a high average rating, and not have been remade in the past 25 years.[^4]
+Find a classic movie to remake with your key talent. The original should have a large number of IMDb ratings, a high average rating, and not have been remade in the past 25 years.[^2]
+
+[^2]: In order to see that a movie has not been recently remade, it is sufficient to confirm that no movie has been made with the same name in the past 25 years.
 
 Once you have found your classic movie to remake, confirm whether key actors, directors, or writers from the original are still alive. If so, you need to contact your legal department to ensure they can secure the rights to the project. You may also want to include the classic actors as "fan service."
-:::
 
-[^4]: In order to see that a movie has not been recently remade, it is sufficient to confirm that no movie has been made with the same name in the past 25 years.
+The question does not specify genre, but does specify title type. I believe in the versatility of the team chosen so let's find the movie.
+
+```{r}
+task6_table <- NEW_TITLE_RATINGS_WITH_BIRTHYEAR |>
+  filter(titleType == "movie", numVotes > 100000)
+
+task6_table |> 
+  group_by(tconst, primaryTitle, genres) |>
+  summarise( Average_Weighted_Rating = mean(weighted_rating)) |>
+  arrange(desc(Average_Weighted_Rating)) |>
+  head(10) |>
+  ungroup()
+
+```
+
+I have created the table above filtering our data for movies with more than 100,000 votes. The top movie is ***The Shawshank Redemption*** and its genre is `Drama` which fits perfectly with our team. As we can see below, there is only one title with that name in our data set.
+
+```{r}
+TITLE_BASICS |>
+  filter(primaryTitle == "The Shawshank Redemption")
+```
+
+The following people participated in this production in different capacities. They are less than 100 years old and they might be alive. We can contact them to secure rights.
+
+```{r}
+NEW_TITLE_RATINGS |>
+  filter(tconst == "tt0111161") |>
+  left_join(NAME_BASICS, join_by(nconst == nconst)) |>
+  filter(is.na(deathYear)) |>
+  filter(birthYear>"1924")
+
+```
 
 ## Putting It Together
 
-::: callout-tip
-#### Task 7: Write and Deliver Your Pitch
+## Task 7: Write and Deliver Your Pitch: Instructor-Provided Questions
 
 Now that you have completed your analysis, write an "elevator pitch" of approximately 200-250 words for your proposed Hollywood project. This is the pitch you will bring to the studio head (your boss); if the studio head likes your pitch, you will be given a small sum of money to start securing the story rights and locking down tentative deals with key talent.
 
@@ -312,11 +908,18 @@ If your boss approves the pitch, you will need to have a brief trailer ready for
 > From director D, the visionary mind between N1; and From actor A, beloved star of N2; and From actor A2, Hollywood icon of genre G, Comes the timeless tail N3 A story of TOPIC, TOPIC, and TOPIC Coming soon to a theater near you.
 
 If you're creatively-minded, you could have some fun here using Generative tools to draft a script or mock up a movie poster for your pitch.
-:::
 
-## General Remarks
+### Task 7: Write and Deliver Your Pitch
 
-As you approach this project, recall there are no right or wrong answers. You are exploring data looking for *exciting* and *actionable* findings. You have several key decisions to make and you can support them with data, but the decisions are ultimately yours. This project is an exercise both in the "nuts-and-bolts" of analyzing a large data set and in using data to inform and refine what is ultimately still a "gut feeling" qualitative business decision.
+Based on IMDb data, I conducted research in order to find the best industry to launch our new project. After creating a metric of success that takes into consideration the public awareness of the title, I found that Drama is the best genre for our project. To work on this project, we will need the best talent. Therefore, I have selected the following individuals for the following roles (see known for titles next to their names):
+
+-   Actress: Storm Reid - *Stand Still Like the Hummingbird*
+-   Actor: Richard Schiff - *The West Wing*
+-   Director: Daniel Attias - *Kingdom Come*
+
+Our team has the experience of our Director and our Actor, both of which have many years of experience in the industry. We also have a young Actress, who despite her youth, has been able to achieve great success by being part of many successful and well known titles. All of them, have been part of titles with an average weighted rating above 7.5. This measure reflects public awareness and quality of the production. We would like to tap into the public awareness and good reception of the movie ***The Shawshank Redemption*** and make a remake of this classic. This is a great movie in the `Drama` genre with an average weighted rating of 9.3.
+
+Given the public’s strong demand for `Drama` titles, and the strong team I have selected, I am confident we can create a successful title.
 
 ------------------------------------------------------------------------
 
