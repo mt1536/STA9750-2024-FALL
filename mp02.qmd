@@ -1,6 +1,6 @@
 ---
 title: "Mini-Project #02: The Business of Show Business"
-editor: visual
+author: "mt1536"
 ---
 
 ```{r echo=FALSE, message=FALSE}
@@ -23,7 +23,7 @@ We will start by downloading the data from the [Internet Movie Database (IMDb)](
 #| label: 'imdb_name_basics'
 #| message: false 
 #| warning: false
-#| cache: true
+#| cache: false
 get_imdb_file <- function(fname){
     BASE_URL <- "https://datasets.imdbws.com/"
     fname_ext <- paste0(fname, ".tsv.gz")
@@ -42,7 +42,7 @@ NAME_BASICS      <- get_imdb_file("name.basics")
 #| label: 'imdb_title_basics'
 #| message: false 
 #| warning: false
-#| cache: true
+#| cache: false
 TITLE_BASICS     <- get_imdb_file("title.basics")
 ```
 
@@ -50,7 +50,7 @@ TITLE_BASICS     <- get_imdb_file("title.basics")
 #| label: 'imdb_title_episode'
 #| message: false 
 #| warning: false
-#| cache: true
+#| cache: false
 TITLE_EPISODES   <- get_imdb_file("title.episode")
 ```
 
@@ -58,7 +58,7 @@ TITLE_EPISODES   <- get_imdb_file("title.episode")
 #| label: 'imdb_title_ratings'
 #| message: false 
 #| warning: false
-#| cache: true
+#| cache: false
 TITLE_RATINGS    <- get_imdb_file("title.ratings")
 ```
 
@@ -66,7 +66,7 @@ TITLE_RATINGS    <- get_imdb_file("title.ratings")
 #| label: 'imdb_title_crew'
 #| message: false 
 #| warning: false
-#| cache: true
+#| cache: false
 TITLE_CREW       <- get_imdb_file("title.crew")
 ```
 
@@ -88,7 +88,7 @@ Given this is a large amount of data, we are going to need to start down-selecti
 
 ```{r}
 #| label: 'name_basics_filter'
-#| cache: true
+#| cache: false
 NAME_BASICS <- NAME_BASICS |> 
     filter(str_count(knownForTitles, ",") > 1)
 ```
@@ -121,7 +121,7 @@ By applying the following code, we significantly reduce the size of the data set
 
 ```{r}
 #| label: 'title_ratings_filter'
-#| cache: true
+#| cache: false
 TITLE_RATINGS <- TITLE_RATINGS |>
     filter(numVotes >= 100)
 ```
@@ -129,7 +129,7 @@ TITLE_RATINGS <- TITLE_RATINGS |>
 The same filtering will be applied to the other `TITLE_*` tables. In the following case, the [`semi_join`](https://dplyr.tidyverse.org/reference/filter-joins.html) is used. The `semi_join` returns only values which have a match, but doesn't add columns.
 
 ```{r}
-#| cache: true
+#| cache: false
 #| label: 'title_other_filter'
 #| message: false
 TITLE_BASICS <- TITLE_BASICS |>
@@ -225,7 +225,7 @@ We can use the `separate_longer_delim` function to break these into multiple row
 
 ```{r}
 #| label: 'separate_longer_delim_example'
-#| cache: true
+#| cache: false
 NAME_BASICS |> separate_longer_delim(knownForTitles, ",") |> slice_head(n = 10) |> glimpse(width = 100, max.extra.cols = Inf)
 
 ```
