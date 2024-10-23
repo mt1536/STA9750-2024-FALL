@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="mt1536">
 
 <title>Mini-Project #02: The Business of Show Business – STA 9750 2024 Submission Material</title>
 <style>
@@ -167,6 +168,12 @@ window.Quarto = {
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>mt1536 </p>
+          </div>
+  </div>
     
   
     
@@ -210,9 +217,7 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>TITLE_CREW       <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">"title.crew"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>TITLE_PRINCIPALS <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">"title.principals"</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Note this was run with eval: true once, and then changed to false due to the size of the data. In following steps will will modify this table and cache it.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>TITLE_PRINCIPALS <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">"title.principals"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="data-sub-sampling" class="level3">
@@ -290,69 +295,120 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="initial-exploration">Initial Exploration</h3>
 <p>We will start examining our data more closely.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"NAME_BASICS TABLE"</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(NAME_BASICS)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"TITLE_BASICS TABLE"</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(TITLE_BASICS)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"TITLE_CREW TABLE"</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(TITLE_CREW)</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"TITLE_EPISODES TABLE"</span>)</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(TITLE_EPISODES)</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"TITLE_PRINCIPALS TABLE"</span>)</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(TITLE_PRINCIPALS)</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"TITLE_RATINGS TABLE"</span>)</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(TITLE_RATINGS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"NAME_BASICS TABLE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "NAME_BASICS TABLE"</code></pre>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(NAME_BASICS, <span class="at">width =</span> <span class="dv">100</span>, <span class="at">max.extra.cols =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 3,188,805
+Columns: 6
+$ nconst            &lt;chr&gt; "nm0000001", "nm0000002", "nm0000003", "nm0000004", "nm0000005", "nm0000…
+$ primaryName       &lt;chr&gt; "Fred Astaire", "Lauren Bacall", "Brigitte Bardot", "John Belushi", "Ing…
+$ birthYear         &lt;chr&gt; "1899", "1924", "1934", "1949", "1918", "1915", "1899", "1924", "1925", …
+$ deathYear         &lt;chr&gt; "1987", "2014", "\\N", "1982", "2007", "1982", "1957", "2004", "1984", "…
+$ primaryProfession &lt;chr&gt; "actor,miscellaneous,producer", "actress,soundtrack,archive_footage", "a…
+$ knownForTitles    &lt;chr&gt; "tt0072308,tt0050419,tt0053137,tt0027125", "tt0037382,tt0075213,tt011705…</code></pre>
 </div>
-<div class="callout-title-container flex-fill">
-Task 1: Column Type Correction (Instructor-Provided)
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"TITLE_BASICS TABLE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "TITLE_BASICS TABLE"</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(TITLE_BASICS, <span class="at">width =</span> <span class="dv">100</span>, <span class="at">max.extra.cols =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 374,145
+Columns: 9
+$ tconst         &lt;chr&gt; "tt0000001", "tt0000002", "tt0000003", "tt0000004", "tt0000005", "tt0000006…
+$ titleType      &lt;chr&gt; "short", "short", "short", "short", "short", "short", "short", "short", "mo…
+$ primaryTitle   &lt;chr&gt; "Carmencita", "Le clown et ses chiens", "Poor Pierrot", "Un bon bock", "Bla…
+$ originalTitle  &lt;chr&gt; "Carmencita", "Le clown et ses chiens", "Pauvre Pierrot", "Un bon bock", "B…
+$ isAdult        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+$ startYear      &lt;chr&gt; "1894", "1892", "1892", "1892", "1893", "1894", "1894", "1894", "1894", "18…
+$ endYear        &lt;chr&gt; "\\N", "\\N", "\\N", "\\N", "\\N", "\\N", "\\N", "\\N", "\\N", "\\N", "\\N"…
+$ runtimeMinutes &lt;chr&gt; "1", "5", "5", "12", "1", "1", "1", "1", "45", "1", "1", "1", "1", "1", "2"…
+$ genres         &lt;chr&gt; "Documentary,Short", "Animation,Short", "Animation,Comedy,Romance", "Animat…</code></pre>
 </div>
-<div class="callout-body-container callout-body">
-<p>Correct the column types of the <code>TITLE</code> tables using a combination of <code>mutate</code> and the coercion functions <code>as.numeric</code> and <code>as.logical</code>.</p>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"TITLE_CREW TABLE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "TITLE_CREW TABLE"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(TITLE_CREW, <span class="at">width =</span> <span class="dv">100</span>, <span class="at">max.extra.cols =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 373,840
+Columns: 3
+$ tconst    &lt;chr&gt; "tt0000001", "tt0000002", "tt0000003", "tt0000004", "tt0000005", "tt0000006", "t…
+$ directors &lt;chr&gt; "nm0005690", "nm0721526", "nm0721526", "nm0721526", "nm0005690", "nm0005690", "n…
+$ writers   &lt;chr&gt; "\\N", "\\N", "\\N", "\\N", "\\N", "\\N", "\\N", "\\N", "nm0085156", "\\N", "\\N…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"TITLE_EPISODES TABLE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "TITLE_EPISODES TABLE"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(TITLE_EPISODES, <span class="at">width =</span> <span class="dv">100</span>, <span class="at">max.extra.cols =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 3,022,865
+Columns: 4
+$ tconst        &lt;chr&gt; "tt0045960", "tt0046855", "tt0048378", "tt0048562", "tt0049025", "tt0049473"…
+$ parentTconst  &lt;chr&gt; "tt0044284", "tt0046643", "tt0047702", "tt0047768", "tt0047720", "tt0046593"…
+$ seasonNumber  &lt;chr&gt; "2", "1", "1", "1", "1", "1", "1", "1", "1", "3", "3", "1", "8", "1", "10", …
+$ episodeNumber &lt;chr&gt; "3", "4", "6", "10", "4", "20", "5", "2", "20", "6", "2", "3", "2", "10", "1…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"TITLE_PRINCIPALS TABLE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "TITLE_PRINCIPALS TABLE"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(TITLE_PRINCIPALS, <span class="at">width =</span> <span class="dv">100</span>, <span class="at">max.extra.cols =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 6,619,063
+Columns: 6
+$ tconst     &lt;chr&gt; "tt0000001", "tt0000001", "tt0000001", "tt0000001", "tt0000002", "tt0000002", "…
+$ ordering   &lt;dbl&gt; 1, 2, 3, 4, 1, 2, 1, 2, 3, 4, 5, 1, 2, 1, 2, 3, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4…
+$ nconst     &lt;chr&gt; "nm1588970", "nm0005690", "nm0005690", "nm0374658", "nm0721526", "nm1335271", "…
+$ category   &lt;chr&gt; "self", "director", "producer", "cinematographer", "director", "composer", "dir…
+$ job        &lt;chr&gt; "\\N", "\\N", "producer", "director of photography", "\\N", "\\N", "\\N", "prod…
+$ characters &lt;chr&gt; "[\"Self\"]", "\\N", "\\N", "\\N", "\\N", "\\N", "\\N", "\\N", "\\N", "\\N", "\…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"TITLE_RATINGS TABLE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "TITLE_RATINGS TABLE"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(TITLE_RATINGS, <span class="at">width =</span> <span class="dv">100</span>, <span class="at">max.extra.cols =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 374,145
+Columns: 3
+$ tconst        &lt;chr&gt; "tt0000001", "tt0000002", "tt0000003", "tt0000004", "tt0000005", "tt0000006"…
+$ averageRating &lt;dbl&gt; 5.7, 5.6, 6.5, 5.4, 6.2, 5.0, 5.4, 5.4, 5.4, 6.8, 5.2, 7.4, 5.7, 7.1, 6.1, 5…
+$ numVotes      &lt;dbl&gt; 2096, 283, 2103, 183, 2839, 197, 889, 2243, 215, 7728, 400, 13138, 2012, 597…</code></pre>
 </div>
 </div>
 </section>
+</section>
+<section id="task-1-column-type-correction-instructor-provided" class="level2">
+<h2 class="anchored" data-anchor-id="task-1-column-type-correction-instructor-provided">Task 1: Column Type Correction (Instructor-Provided)</h2>
+<p>Correct the column types of the <code>TITLE</code> tables using a combination of <code>mutate</code> and the coercion functions <code>as.numeric</code> and <code>as.logical</code>.</p>
 <section id="task-1-column-type-correction" class="level3">
 <h3 class="anchored" data-anchor-id="task-1-column-type-correction">Task 1: Column Type Correction</h3>
 <p>The use of the <code>glimpse</code> function above allows us to examine each table. We can see that many columns appear to be read as <em>character</em> (string) vectors, even when they should be read as <em>numeric</em>, or <em>numeric</em> when they should be read as <em>logical</em>. This could occur because missing values are represented as <code>\\N</code> or other non numeric values. Since <code>R</code> does not know that these are <code>NA</code> values, it retains them as strings.</p>
 <p>To fix these, we will use the <code>mutate</code> command, and the <code>as.numeric</code> or <code>as.logical</code> command to change column type as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>NAME_BASICS <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">birthYear =</span> <span class="fu">as.numeric</span>(birthYear),</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">deathYear =</span> <span class="fu">as.numeric</span>(deathYear))</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"NAME_BASICS TABLE"</span>)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(NAME_BASICS)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS <span class="ot">&lt;-</span> TITLE_BASICS <span class="sc">|&gt;</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">startYear =</span> <span class="fu">as.numeric</span>(startYear),</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">endYear =</span> <span class="fu">as.numeric</span>(endYear),</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">runtimeMinutes =</span> <span class="fu">as.numeric</span>(runtimeMinutes),</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">isAdult =</span> <span class="fu">as.logical</span>(isAdult))</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"TITLE_BASICS TABLE"</span>)</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(TITLE_BASICS)</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>TITLE_EPISODES <span class="ot">&lt;-</span> TITLE_EPISODES <span class="sc">|&gt;</span></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">seasonNumber =</span> <span class="fu">as.numeric</span>(seasonNumber),</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">episodeNumber =</span> <span class="fu">as.numeric</span>(episodeNumber))</span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"TITLE_EPISODES TABLE"</span>)</span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(TITLE_EPISODES)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>NAME_BASICS <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">birthYear =</span> <span class="fu">as.numeric</span>(birthYear),</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">deathYear =</span> <span class="fu">as.numeric</span>(deathYear))</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS <span class="ot">&lt;-</span> TITLE_BASICS <span class="sc">|&gt;</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">startYear =</span> <span class="fu">as.numeric</span>(startYear),</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">endYear =</span> <span class="fu">as.numeric</span>(endYear),</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">runtimeMinutes =</span> <span class="fu">as.numeric</span>(runtimeMinutes),</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">isAdult =</span> <span class="fu">as.logical</span>(isAdult))</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>TITLE_EPISODES <span class="ot">&lt;-</span> TITLE_EPISODES <span class="sc">|&gt;</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">seasonNumber =</span> <span class="fu">as.numeric</span>(seasonNumber),</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">episodeNumber =</span> <span class="fu">as.numeric</span>(episodeNumber))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Another aspect of this data that we would like to address is that it combines multiple pieces of information in a single cell separated by commas. We see this in the <code>NAME_BASICS</code> table, where both the <code>primaryProfession</code> and <code>knownForTitles</code> columns combine multiple values.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(NAME_BASICS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(NAME_BASICS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 3,188,805
 Columns: 6
@@ -366,30 +422,16 @@ $ knownForTitles    &lt;chr&gt; "tt0072308,tt0050419,tt0053137,tt0027125", "tt00
 </div>
 <p>We can use the <code>separate_longer_delim</code> function to break these into multiple rows: for example</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>NAME_BASICS <span class="sc">|&gt;</span> <span class="fu">separate_longer_delim</span>(knownForTitles, <span class="st">","</span>) <span class="sc">|&gt;</span> <span class="fu">slice_head</span>(<span class="at">n=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>NAME_BASICS <span class="sc">|&gt;</span> <span class="fu">separate_longer_delim</span>(knownForTitles, <span class="st">","</span>) <span class="sc">|&gt;</span> <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span> <span class="fu">glimpse</span>(<span class="at">width =</span> <span class="dv">100</span>, <span class="at">max.extra.cols =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>      nconst     primaryName birthYear deathYear
-1  nm0000001    Fred Astaire      1899      1987
-2  nm0000001    Fred Astaire      1899      1987
-3  nm0000001    Fred Astaire      1899      1987
-4  nm0000001    Fred Astaire      1899      1987
-5  nm0000002   Lauren Bacall      1924      2014
-6  nm0000002   Lauren Bacall      1924      2014
-7  nm0000002   Lauren Bacall      1924      2014
-8  nm0000002   Lauren Bacall      1924      2014
-9  nm0000003 Brigitte Bardot      1934        NA
-10 nm0000003 Brigitte Bardot      1934        NA
-                    primaryProfession knownForTitles
-1        actor,miscellaneous,producer      tt0072308
-2        actor,miscellaneous,producer      tt0050419
-3        actor,miscellaneous,producer      tt0053137
-4        actor,miscellaneous,producer      tt0027125
-5  actress,soundtrack,archive_footage      tt0037382
-6  actress,soundtrack,archive_footage      tt0075213
-7  actress,soundtrack,archive_footage      tt0117057
-8  actress,soundtrack,archive_footage      tt0038355
-9   actress,music_department,producer      tt0057345
-10  actress,music_department,producer      tt0049189</code></pre>
+<pre><code>Rows: 10
+Columns: 6
+$ nconst            &lt;chr&gt; "nm0000001", "nm0000001", "nm0000001", "nm0000001", "nm0000002", "nm0000…
+$ primaryName       &lt;chr&gt; "Fred Astaire", "Fred Astaire", "Fred Astaire", "Fred Astaire", "Lauren …
+$ birthYear         &lt;dbl&gt; 1899, 1899, 1899, 1899, 1924, 1924, 1924, 1924, 1934, 1934
+$ deathYear         &lt;dbl&gt; 1987, 1987, 1987, 1987, 2014, 2014, 2014, 2014, NA, NA
+$ primaryProfession &lt;chr&gt; "actor,miscellaneous,producer", "actor,miscellaneous,producer", "actor,m…
+$ knownForTitles    &lt;chr&gt; "tt0072308", "tt0050419", "tt0053137", "tt0027125", "tt0037382", "tt0075…</code></pre>
 </div>
 </div>
 <p>To preserve flexibility, we will not fully separate <code>NAME_BASICS</code> just yet, but we will need to use <code>separate_longer_delim</code> to answer various questions.</p>
@@ -404,10 +446,10 @@ $ knownForTitles    &lt;chr&gt; "tt0072308,tt0050419,tt0053137,tt0027125", "tt00
 </ol>
 <p>To answer these questions, we will be grouping our TITLE_BASICS table by title type to count how many titles of each type there are, and then we will be filtering by the specific title type we are asked to provide. Please see code and output below:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS <span class="sc">|&gt;</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(titleType) <span class="sc">|&gt;</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"movie"</span> <span class="sc">|</span> titleType <span class="sc">==</span> <span class="st">"tvSeries"</span> <span class="sc">|</span> titleType <span class="sc">==</span> <span class="st">"tvEpisode"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS <span class="sc">|&gt;</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(titleType) <span class="sc">|&gt;</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"movie"</span> <span class="sc">|</span> titleType <span class="sc">==</span> <span class="st">"tvSeries"</span> <span class="sc">|</span> titleType <span class="sc">==</span> <span class="st">"tvEpisode"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   titleType  count
@@ -426,35 +468,28 @@ $ knownForTitles    &lt;chr&gt; "tt0072308,tt0050419,tt0053137,tt0027125", "tt00
 </ol>
 <p>Given the data include Hollywood personalities with birth year but no death year, I will filter by those born after 1904.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>current_year <span class="ot">&lt;-</span> <span class="fu">year</span>(<span class="fu">Sys.Date</span>())</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>oldest_living_person <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(birthYear <span class="sc">&gt;</span> <span class="dv">1904</span>, <span class="fu">is.na</span>(deathYear)) <span class="sc">|&gt;</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(birthYear) <span class="sc">|&gt;</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age =</span> current_year <span class="sc">-</span> birthYear)</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>oldest_living_person</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>current_year <span class="ot">&lt;-</span> <span class="fu">year</span>(<span class="fu">Sys.Date</span>())</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>oldest_living_person <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(birthYear <span class="sc">&gt;</span> <span class="dv">1904</span>, <span class="fu">is.na</span>(deathYear)) <span class="sc">|&gt;</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(birthYear) <span class="sc">|&gt;</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age =</span> current_year <span class="sc">-</span> birthYear)</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>oldest_living_person <span class="sc">|&gt;</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryName, birthYear, age) <span class="sc">|&gt;</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(primaryName, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(primaryName) <span class="sc">|&gt;</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     nconst       primaryName birthYear deathYear
-1 nm0007643      Julio Abadía      1905        NA
-2 nm0033860      Michael Arco      1905        NA
-3 nm0039930 Aleksandr Astafev      1905        NA
-4 nm0056586     A. Barr-Smith      1905        NA
-5 nm0081491     Max A. Bienek      1905        NA
-                  primaryProfession                           knownForTitles
-1                             actor  tt0028204,tt0182471,tt0022157,tt0216742
-2                             actor tt0052425,tt0055206,tt0051817,tt13572070
-3 cinematographer,camera_department tt0029850,tt0038888,tt21839248,tt5897294
-4          producer,director,writer  tt0175702,tt0040279,tt0160970,tt0028488
-5  art_director,production_designer  tt0053470,tt0045046,tt0222726,tt0048635
-  age
-1 119
-2 119
-3 119
-4 119
-5 119</code></pre>
+<pre><code># A tibble: 5 × 3
+# Groups:   primaryName [5]
+  primaryName       birthYear   age
+  &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt;
+1 Julio Abadía           1905   119
+2 Michael Arco           1905   119
+3 Aleksandr Astafev      1905   119
+4 A. Barr-Smith          1905   119
+5 Max A. Bienek          1905   119</code></pre>
 </div>
 </div>
 <p>Based on the results, and the data that we have, we cannot definitely determine who is the oldest person alive in our data set. In the same way there are individuals in our data born in 1625 with no death year, the output received could include deceased individuals with no death year available but who are deceased. If for grading purposes I must chose one, I would say Julio Abadía is the oldest living person in our data set. <a href="https://www.imdb.com/name/nm0007643/?ref_=nv_sr_srsg_0_tt_0_nm_8_in_0_q_julio%2520abadia">Julio Abadía</a> was born in Bogota Colombia, and is known for <a href="https://www.imdb.com/title/tt0028204/?ref_=nm_flmg_knf_c_1">La Rosa de Francia</a>.</p>
@@ -467,18 +502,28 @@ $ knownForTitles    &lt;chr&gt; "tt0072308,tt0050419,tt0053137,tt0027125", "tt00
 <p>The TV Episode with a perfect 10/10 rating and at least 200,000 votes is <strong><em>Ozymandias</em></strong>. To find this, I fully joined three tables and filtered by the parameters provided. To find which series Ozymandias belongs to, I created a column that matches the tconst of the parent to the tconst in the TITLE_BASICS table and returns the title. Thus, we can see that Ozymandias belongs to the series <strong><em>Breaking Bad</em></strong>.</p>
 <p>At this point, we take note of the genres, which could give us some insight into which genra we could do a new production on.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS_RATINGS_EPISODES <span class="ot">&lt;-</span> <span class="fu">full_join</span>(TITLE_BASICS, TITLE_RATINGS, <span class="fu">join_by</span>(tconst)) <span class="sc">|&gt;</span> <span class="fu">full_join</span>(TITLE_EPISODES, <span class="fu">join_by</span>(tconst))</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS_RATINGS_EPISODES <span class="sc">|&gt;</span> </span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"tvEpisode"</span>, averageRating <span class="sc">==</span> <span class="dv">10</span>, numVotes <span class="sc">&gt;=</span> <span class="dv">200000</span>) <span class="sc">|&gt;</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">parentTitle =</span> TITLE_BASICS<span class="sc">$</span>originalTitle[<span class="fu">match</span>(parentTconst, TITLE_BASICS<span class="sc">$</span>tconst)]) <span class="sc">|&gt;</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(tconst, isAdult, endYear, primaryTitle)) <span class="sc">|&gt;</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS_RATINGS_EPISODES <span class="ot">&lt;-</span> <span class="fu">full_join</span>(TITLE_BASICS, TITLE_RATINGS, <span class="fu">join_by</span>(tconst)) <span class="sc">|&gt;</span> <span class="fu">full_join</span>(TITLE_EPISODES, <span class="fu">join_by</span>(tconst))</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS_RATINGS_EPISODES <span class="sc">|&gt;</span> </span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"tvEpisode"</span>, averageRating <span class="sc">==</span> <span class="dv">10</span>, numVotes <span class="sc">&gt;=</span> <span class="dv">200000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">parentTitle =</span> TITLE_BASICS<span class="sc">$</span>originalTitle[<span class="fu">match</span>(parentTconst, TITLE_BASICS<span class="sc">$</span>tconst)]) <span class="sc">|&gt;</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(tconst, isAdult, endYear, primaryTitle)) <span class="sc">|&gt;</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>() <span class="sc">|&gt;</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>(<span class="at">width =</span> <span class="dv">100</span>, <span class="at">max.extra.cols =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  titleType originalTitle startYear runtimeMinutes               genres
-1 tvEpisode    Ozymandias      2013             47 Crime,Drama,Thriller
-  averageRating numVotes parentTconst seasonNumber episodeNumber  parentTitle
-1            10   229845    tt0903747            5            14 Breaking Bad</code></pre>
+<pre><code>Rows: 1
+Columns: 11
+$ titleType      &lt;chr&gt; "tvEpisode"
+$ originalTitle  &lt;chr&gt; "Ozymandias"
+$ startYear      &lt;dbl&gt; 2013
+$ runtimeMinutes &lt;dbl&gt; 47
+$ genres         &lt;chr&gt; "Crime,Drama,Thriller"
+$ averageRating  &lt;dbl&gt; 10
+$ numVotes       &lt;dbl&gt; 229845
+$ parentTconst   &lt;chr&gt; "tt0903747"
+$ seasonNumber   &lt;dbl&gt; 5
+$ episodeNumber  &lt;dbl&gt; 14
+$ parentTitle    &lt;chr&gt; "Breaking Bad"</code></pre>
 </div>
 </div>
 </section>
@@ -489,31 +534,30 @@ $ knownForTitles    &lt;chr&gt; "tt0072308,tt0050419,tt0053137,tt0027125", "tt00
 </ol>
 <p>The actor Mark Hamill is most known for the four Star Wars projects listed below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Expand the knownForTitles values into rows with a single title. I am doing this in order to match each title with its name</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>NAME_BASICS <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_longer_delim</span>(<span class="at">col =</span> knownForTitles, <span class="at">delim =</span> <span class="st">","</span>)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Now I can join the table above with another table containing the name of the titles. I am doing a left join to ensure I keep all data from the NAME_BASICS table regardless of there being a match or not</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>NAME_TITLE_BASICS <span class="ot">&lt;-</span> <span class="fu">left_join</span>(NAME_BASICS, TITLE_BASICS, <span class="fu">join_by</span>(knownForTitles <span class="sc">==</span> tconst))<span class="sc">|&gt;</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">knownForTitle =</span> knownForTitles)</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Now, I use the newly created table to answer the question (I asked the system to give me 20 results to ensure I am not missing any titles)</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>NAME_TITLE_BASICS <span class="sc">|&gt;</span> </span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(primaryName <span class="sc">==</span> <span class="st">"Mark Hamill"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryName, titleType, originalTitle, knownForTitle, genres, startYear) <span class="sc">|&gt;</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Expand the knownForTitles values into rows with a single title. I am doing this in order to match each title with its name</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>NAME_BASICS <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_longer_delim</span>(<span class="at">col =</span> knownForTitles, <span class="at">delim =</span> <span class="st">","</span>)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Now I can join the table above with another table containing the name of the titles. I am doing a left join to ensure I keep all data from the NAME_BASICS table regardless of there being a match or not</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>NAME_TITLE_BASICS <span class="ot">&lt;-</span> <span class="fu">left_join</span>(NAME_BASICS, TITLE_BASICS, <span class="fu">join_by</span>(knownForTitles <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">knownForTitle =</span> knownForTitles)</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Now, I use the newly created table to answer the question (I asked the system to give me 20 results to ensure I am not missing any titles)</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>NAME_TITLE_BASICS <span class="sc">|&gt;</span> </span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(primaryName <span class="sc">==</span> <span class="st">"Mark Hamill"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryName, titleType, originalTitle, knownForTitle, genres, startYear) <span class="sc">|&gt;</span></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">20</span>) <span class="sc">|&gt;</span></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>(<span class="at">width =</span> <span class="dv">100</span>, <span class="at">max.extra.cols =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  primaryName titleType                                  originalTitle
-1 Mark Hamill     movie                                      Star Wars
-2 Mark Hamill     movie        Star Wars: Episode VIII - The Last Jedi
-3 Mark Hamill     movie Star Wars: Episode V - The Empire Strikes Back
-4 Mark Hamill     movie     Star Wars: Episode VI - Return of the Jedi
-  knownForTitle                   genres startYear
-1     tt0076759 Action,Adventure,Fantasy      1977
-2     tt2527336 Action,Adventure,Fantasy      2017
-3     tt0080684 Action,Adventure,Fantasy      1980
-4     tt0086190 Action,Adventure,Fantasy      1983</code></pre>
+<pre><code>Rows: 4
+Columns: 6
+$ primaryName   &lt;chr&gt; "Mark Hamill", "Mark Hamill", "Mark Hamill", "Mark Hamill"
+$ titleType     &lt;chr&gt; "movie", "movie", "movie", "movie"
+$ originalTitle &lt;chr&gt; "Star Wars", "Star Wars: Episode VIII - The Last Jedi", "Star Wars: Episode …
+$ knownForTitle &lt;chr&gt; "tt0076759", "tt2527336", "tt0080684", "tt0086190"
+$ genres        &lt;chr&gt; "Action,Adventure,Fantasy", "Action,Adventure,Fantasy", "Action,Adventure,Fa…
+$ startYear     &lt;dbl&gt; 1977, 2017, 1980, 1983</code></pre>
 </div>
 </div>
 <p>It is interesting to see that this actor is know for four related projects (Star Wars) and that the start year of these projects span across multiple time periods.</p>
@@ -525,21 +569,21 @@ $ knownForTitles    &lt;chr&gt; "tt0072308,tt0050419,tt0053137,tt0027125", "tt00
 </ol>
 <p>The TV series with more than 12 episodes and the highest average rating is <strong><em>20 Dakika</em></strong>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>Episodes_Basics_Ratings <span class="ot">&lt;-</span> <span class="fu">full_join</span>(TITLE_EPISODES, TITLE_BASICS, <span class="fu">join_by</span>(tconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(TITLE_RATINGS, <span class="fu">join_by</span>(tconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">parentTitle =</span> TITLE_BASICS<span class="sc">$</span>originalTitle[<span class="fu">match</span>(parentTconst, TITLE_BASICS<span class="sc">$</span>tconst)])</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>Episodes_Basics_Ratings <span class="sc">|&gt;</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst) <span class="sc">|&gt;</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Average_Rating =</span> <span class="fu">mean</span>(averageRating, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total_Episodes =</span> <span class="fu">n</span>(),</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Average_Votes =</span> <span class="fu">mean</span>(numVotes)</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Total_Episodes <span class="sc">&gt;</span> <span class="dv">12</span>, Average_Votes <span class="sc">&gt;=</span> <span class="dv">300</span>) <span class="sc">|&gt;</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Average_Rating)) <span class="sc">|&gt;</span></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">parentTitle =</span> TITLE_BASICS<span class="sc">$</span>originalTitle[<span class="fu">match</span>(parentTconst, TITLE_BASICS<span class="sc">$</span>tconst)]) <span class="sc">|&gt;</span></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>Episodes_Basics_Ratings <span class="ot">&lt;-</span> <span class="fu">full_join</span>(TITLE_EPISODES, TITLE_BASICS, <span class="fu">join_by</span>(tconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(TITLE_RATINGS, <span class="fu">join_by</span>(tconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">parentTitle =</span> TITLE_BASICS<span class="sc">$</span>originalTitle[<span class="fu">match</span>(parentTconst, TITLE_BASICS<span class="sc">$</span>tconst)])</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>Episodes_Basics_Ratings <span class="sc">|&gt;</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst) <span class="sc">|&gt;</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Average_Rating =</span> <span class="fu">mean</span>(averageRating, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total_Episodes =</span> <span class="fu">n</span>(),</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Average_Votes =</span> <span class="fu">mean</span>(numVotes)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Total_Episodes <span class="sc">&gt;</span> <span class="dv">12</span>, Average_Votes <span class="sc">&gt;=</span> <span class="dv">300</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Average_Rating)) <span class="sc">|&gt;</span></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">parentTitle =</span> TITLE_BASICS<span class="sc">$</span>originalTitle[<span class="fu">match</span>(parentTconst, TITLE_BASICS<span class="sc">$</span>tconst)]) <span class="sc">|&gt;</span></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 925 × 5
    parentTconst Average_Rating Total_Episodes Average_Votes parentTitle         
@@ -556,92 +600,27 @@ $ knownForTitles    &lt;chr&gt; "tt0072308,tt0050419,tt0053137,tt0027125", "tt00
 10 tt27460313             9.14             40          427. Yu Gu Yao           
 # ℹ 915 more rows</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Styled with Style add in</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Lets examine the this TV series more closely.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS_RATINGS_EPISODES <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(parentTconst <span class="sc">==</span> <span class="st">"tt2544148"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(endYear,tconst, originalTitle))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS_RATINGS_EPISODES <span class="sc">|&gt;</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(parentTconst <span class="sc">==</span> <span class="st">"tt2544148"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(endYear,tconst, originalTitle)) <span class="sc">|&gt;</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>(<span class="at">width =</span> <span class="dv">100</span>, <span class="at">max.extra.cols =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   titleType          primaryTitle isAdult startYear runtimeMinutes
-1  tvEpisode            Demirbahce   FALSE      2013             NA
-2  tvEpisode             Rumelihan   FALSE      2013             NA
-3  tvEpisode        Cellat Cesmesi   FALSE      2013             NA
-4  tvEpisode            Kanli Kuyu   FALSE      2013             NA
-5  tvEpisode        Cihangir Camii   FALSE      2013             NA
-6  tvEpisode                  Vefa   FALSE      2013             NA
-7  tvEpisode                  Nika   FALSE      2013             NA
-8  tvEpisode             Kagithane   FALSE      2013             NA
-9  tvEpisode Mihrimah Sultan Camii   FALSE      2013             NA
-10 tvEpisode          Sevda Tepesi   FALSE      2013             NA
-11 tvEpisode               Tophane   FALSE      2013             NA
-12 tvEpisode            Kiz Kulesi   FALSE      2013             NA
-13 tvEpisode               Canfeda   FALSE      2013             NA
-14 tvEpisode           Kanli Cinar   FALSE      2013             NA
-15 tvEpisode         Feriye Sarayi   FALSE      2013             NA
-16 tvEpisode    Esma Sultan Yalisi   FALSE      2013             NA
-17 tvEpisode               Vanikoy   FALSE      2013             NA
-18 tvEpisode         Yildiz Sarayi   FALSE      2013             NA
-19 tvEpisode          Sahrayicedid   FALSE      2013             NA
-20 tvEpisode          Kirmizi Yali   FALSE      2013             NA
-21 tvEpisode       Agora Meyhanesi   FALSE      2013             NA
-22 tvEpisode             Eskihisar   FALSE      2013             NA
-23 tvEpisode                 Bursa   FALSE      2013             NA
-24 tvEpisode        Galata Köprüsü   FALSE      2013             NA
-25 tvEpisode              Istanbul   FALSE      2013             NA
-                 genres averageRating numVotes parentTconst seasonNumber
-1  Action,Drama,Romance           9.5     1567    tt2544148            1
-2  Action,Drama,Romance           9.6     1538    tt2544148            1
-3  Action,Drama,Romance           9.6     1273    tt2544148            1
-4  Action,Drama,Romance           9.6     1241    tt2544148            1
-5  Action,Drama,Romance           9.5     1241    tt2544148            1
-6  Action,Drama,Romance           9.4     1233    tt2544148            1
-7  Action,Drama,Romance           9.5     1304    tt2544148            1
-8  Action,Drama,Romance           9.7     1312    tt2544148            1
-9  Action,Drama,Romance           9.7     1310    tt2544148            1
-10 Action,Drama,Romance           9.7     1308    tt2544148            1
-11 Action,Drama,Romance           9.5     1045    tt2544148            1
-12 Action,Drama,Romance           9.6     1049    tt2544148            1
-13 Action,Drama,Romance           9.6     1053    tt2544148            1
-14 Action,Drama,Romance           9.6     1039    tt2544148            1
-15 Action,Drama,Romance           9.8     1063    tt2544148            1
-16 Action,Drama,Romance           9.8     1057    tt2544148            1
-17 Action,Drama,Romance           9.8     1054    tt2544148            1
-18 Action,Drama,Romance           9.6     1049    tt2544148            1
-19 Action,Drama,Romance           9.7     1049    tt2544148            1
-20 Action,Drama,Romance           9.7     1053    tt2544148            1
-21 Action,Drama,Romance           9.7     1048    tt2544148            1
-22 Action,Drama,Romance           9.7      814    tt2544148            1
-23 Action,Drama,Romance           9.7      808    tt2544148            1
-24 Action,Drama,Romance           9.8      804    tt2544148            1
-25 Action,Drama,Romance           9.8      567    tt2544148            1
-   episodeNumber
-1              1
-2              2
-3              3
-4              4
-5              5
-6              6
-7              7
-8              8
-9              9
-10            10
-11            11
-12            13
-13            14
-14            12
-15            16
-16            18
-17            19
-18            15
-19            17
-20            20
-21            21
-22            22
-23            23
-24            24
-25            25</code></pre>
+<pre><code>Rows: 25
+Columns: 11
+$ titleType      &lt;chr&gt; "tvEpisode", "tvEpisode", "tvEpisode", "tvEpisode", "tvEpisode", "tvEpisode…
+$ primaryTitle   &lt;chr&gt; "Demirbahce", "Rumelihan", "Cellat Cesmesi", "Kanli Kuyu", "Cihangir Camii"…
+$ isAdult        &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE…
+$ startYear      &lt;dbl&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 201…
+$ runtimeMinutes &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ genres         &lt;chr&gt; "Action,Drama,Romance", "Action,Drama,Romance", "Action,Drama,Romance", "Ac…
+$ averageRating  &lt;dbl&gt; 9.5, 9.6, 9.6, 9.6, 9.5, 9.4, 9.5, 9.7, 9.7, 9.7, 9.5, 9.6, 9.6, 9.6, 9.8, …
+$ numVotes       &lt;dbl&gt; 1567, 1538, 1273, 1241, 1241, 1233, 1304, 1312, 1310, 1308, 1045, 1049, 105…
+$ parentTconst   &lt;chr&gt; "tt2544148", "tt2544148", "tt2544148", "tt2544148", "tt2544148", "tt2544148…
+$ seasonNumber   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+$ episodeNumber  &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 12, 16, 18, 19, 15, 17, 20, 21, …</code></pre>
 </div>
 </div>
 <p>From the above, we can see that the genres are Action, Drama, and Romance. Furthermore, the start year was 2013, which is not that old. This could indicate that contemporary audience is receptive to this kind of genre combination.</p>
@@ -654,13 +633,13 @@ $ knownForTitles    &lt;chr&gt; "tt0072308,tt0050419,tt0053137,tt0027125", "tt00
 </ol>
 <p>Let us start by looking at the average ratings per season and the average number of votes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>Episodes_Basics_Ratings <span class="sc">|&gt;</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"tvEpisode"</span>, parentTitle <span class="sc">==</span> <span class="st">"Happy Days"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(seasonNumber) <span class="sc">|&gt;</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Average_Rating =</span> <span class="fu">mean</span>(averageRating, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">Total_Episodes =</span> <span class="fu">n</span>(),</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">Average_Votes =</span> <span class="fu">mean</span>(numVotes)) <span class="sc">|&gt;</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>Episodes_Basics_Ratings <span class="sc">|&gt;</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"tvEpisode"</span>, parentTitle <span class="sc">==</span> <span class="st">"Happy Days"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(seasonNumber) <span class="sc">|&gt;</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Average_Rating =</span> <span class="fu">mean</span>(averageRating, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">Total_Episodes =</span> <span class="fu">n</span>(),</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">Average_Votes =</span> <span class="fu">mean</span>(numVotes)) <span class="sc">|&gt;</span></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 11 × 4
    seasonNumber Average_Rating Total_Episodes Average_Votes
@@ -680,20 +659,20 @@ $ knownForTitles    &lt;chr&gt; "tt0072308,tt0050419,tt0053137,tt0027125", "tt00
 </div>
 <p>From the table, we can clearly see that the average number of votes declined as seasons passed. To better visualize the relationship between the ratings and seasons we will create a linear model</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Name data to be inputted into the linear model</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>Happy_Days_Data <span class="ot">&lt;-</span> Episodes_Basics_Ratings <span class="sc">|&gt;</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"tvEpisode"</span>, parentTitle <span class="sc">==</span> <span class="st">"Happy Days"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(seasonNumber) <span class="sc">|&gt;</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Average_Rating =</span> <span class="fu">mean</span>(averageRating, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">Total_Episodes =</span> <span class="fu">n</span>(),</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">Average_Votes =</span> <span class="fu">mean</span>(numVotes)) <span class="sc">|&gt;</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Create linear model</span></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Average_Rating <span class="sc">~</span> seasonNumber, <span class="at">data =</span> Happy_Days_Data)</span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create graph</span></span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(<span class="st">"ggpmisc"</span>)) <span class="fu">install.packages</span>(<span class="st">"ggpmisc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Name data to be inputted into the linear model</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>Happy_Days_Data <span class="ot">&lt;-</span> Episodes_Basics_Ratings <span class="sc">|&gt;</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"tvEpisode"</span>, parentTitle <span class="sc">==</span> <span class="st">"Happy Days"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(seasonNumber) <span class="sc">|&gt;</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Average_Rating =</span> <span class="fu">mean</span>(averageRating, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">Total_Episodes =</span> <span class="fu">n</span>(),</span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">Average_Votes =</span> <span class="fu">mean</span>(numVotes)) <span class="sc">|&gt;</span></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Create linear model</span></span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Average_Rating <span class="sc">~</span> seasonNumber, <span class="at">data =</span> Happy_Days_Data)</span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create graph</span></span>
+<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(<span class="st">"ggpmisc"</span>)) <span class="fu">install.packages</span>(<span class="st">"ggpmisc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: ggpmisc</code></pre>
 </div>
@@ -715,16 +694,16 @@ Attaching package: 'ggpp'</code></pre>
 
     annotate</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpmisc)</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Happy_Days_Data, <span class="fu">aes</span>(<span class="at">x =</span> seasonNumber, <span class="at">y =</span> Average_Rating)) <span class="sc">+</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_line</span>(<span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Happy Days: Average Rating by Season"</span>,</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Season Number"</span>,</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Average Rating"</span></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpmisc)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Happy_Days_Data, <span class="fu">aes</span>(<span class="at">x =</span> seasonNumber, <span class="at">y =</span> Average_Rating)) <span class="sc">+</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_line</span>(<span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Happy Days: Average Rating by Season"</span>,</span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Season Number"</span>,</span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Average Rating"</span></span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -741,56 +720,395 @@ Attaching package: 'ggpp'</code></pre>
 <p>In this section we will be creating a success metric. It will be derived solely on the data we have due to data licensing constraints.</p>
 <section id="task-3" class="level3">
 <h3 class="anchored" data-anchor-id="task-3">Task 3</h3>
-<p>Design a ‘success’ measure for IMDb entries, reflecting both quality and broad popular awareness. Implement your success metric using a <code>mutate</code> operator to add a new column to the <code>TITLE_RATINGS</code> table.</p>
-<p>Validate your success metric as follows (see task 3 questions and responses below).</p>
+<p>Design a ‘success’ measure for IMDb entries, reflecting both quality and broad popular awareness. Implement your success metric using a <code>mutate</code> operator to add a new column to the <code>TITLE_RATINGS</code> table. Validate your success metric as follows (see task 3 questions and responses below).</p>
+<p>In order to create this measure, first I would like to see a how the number of votes for each title in our <code>TITLE_RATINGS</code> table are distributed. Remember we dropped titles with less than 100 ratings.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>numVotes)) <span class="sc">+</span> </span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Number of IMDB Ratings"</span>) <span class="sc">+</span> </span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Number of Titles"</span>) <span class="sc">+</span> </span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Majority of IMDB Titles Have Less than 100 Ratings"</span>) <span class="sc">+</span> </span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>(<span class="at">label=</span>scales<span class="sc">::</span>comma) <span class="sc">+</span> </span>
+<span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">label=</span>scales<span class="sc">::</span>comma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mp02_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Based on this data. I would like to create a measure that leverages the ratings provided by individuals, but weights the rating by the number of people who voted. Therefore, I will weight titles by the quantile of the number of votes because this would give the rating a sense of popular awareness.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(numVotes) <span class="sc">|&gt;</span></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">quantile</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     0%     25%     50%     75%    100% 
+    100     165     332     971 2952034 </code></pre>
+</div>
+</div>
+<p>Based on the table above, we create the weighted rating</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>TITLE_RATINGS <span class="ot">&lt;-</span> TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">quantile_weight =</span> <span class="fu">cut</span>(numVotes,</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">breaks =</span> <span class="fu">quantile</span>(numVotes,</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">probs =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">1</span>)),</span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">1</span>)),</span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">weighted_rating =</span> averageRating <span class="sc">*</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(quantile_weight)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="task-3-question-1" class="level3">
 <h3 class="anchored" data-anchor-id="task-3-question-1">Task 3 Question 1</h3>
 <p>Choose the top 5-10 movies on your metric and confirm that they were indeed box office successes.</p>
+<p>Yes, the movies were indeed box office successes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>NEW_TITLE_RATINGS <span class="ot">&lt;-</span> <span class="fu">full_join</span>(TITLE_RATINGS, TITLE_BASICS, <span class="fu">join_by</span>(tconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(TITLE_EPISODES, <span class="fu">join_by</span>(tconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">parentTitle =</span> TITLE_BASICS<span class="sc">$</span>originalTitle[<span class="fu">match</span>(parentTconst, TITLE_BASICS<span class="sc">$</span>tconst)])</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>NEW_TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"movie"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(weighted_rating)) <span class="sc">|&gt;</span></span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>parentTitle, <span class="sc">-</span>episodeNumber, <span class="sc">-</span>seasonNumber, <span class="sc">-</span>parentTconst, <span class="sc">-</span>isAdult, <span class="sc">-</span>tconst, <span class="sc">-</span>quantile_weight, <span class="sc">-</span>averageRating, <span class="sc">-</span>endYear, <span class="sc">-</span>originalTitle, <span class="sc">-</span>runtimeMinutes) <span class="sc">|&gt;</span></span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   numVotes weighted_rating titleType        primaryTitle startYear
+1      1025            10.0     movie              Kaveri      2024
+2       994             9.9     movie        Kaalapatthar      2024
+3       980             9.8     movie      Uruttu Factory      2024
+4      1092             9.6     movie   Adharma Kadhaigal      2024
+5      1012             9.6     movie             Aaragan      2024
+6      1038             9.5     movie     Laughing Buddha      2024
+7      1062             9.5     movie    Operation Raavan      2024
+8      4113             9.5     movie          Bahumukham      2024
+9      2072             9.5     movie Janaka Aithe Ganaka      2024
+10     2086             9.5     movie      Ramnagar Bunny      2024
+           genres
+1          Action
+2    Action,Drama
+3     Documentary
+4             \\N
+5           Drama
+6          Comedy
+7           Crime
+8  Drama,Thriller
+9           Drama
+10         Comedy</code></pre>
+</div>
+</div>
 </section>
 <section id="task-3-question-2" class="level3">
 <h3 class="anchored" data-anchor-id="task-3-question-2">Task 3 Question 2</h3>
 <p>Choose 3-5 movies with large numbers of IMDb votes that score poorly on your success metric and confirm that they are indeed of low quality.</p>
+<p>The following shows titles for which the maximum weight was applied and yet the rating was poor.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>NEW_TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"movie"</span>, quantile_weight <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(weighted_rating) <span class="sc">|&gt;</span></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>parentTitle, <span class="sc">-</span>episodeNumber, <span class="sc">-</span>seasonNumber, <span class="sc">-</span>parentTconst, <span class="sc">-</span>isAdult, <span class="sc">-</span>tconst, <span class="sc">-</span>averageRating, <span class="sc">-</span>endYear, <span class="sc">-</span>originalTitle, <span class="sc">-</span>numVotes, <span class="sc">-</span>startYear, <span class="sc">-</span>runtimeMinutes, <span class="sc">-</span>genres) <span class="sc">|&gt;</span></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  quantile_weight weighted_rating titleType
+1               1               1     movie
+2               1               1     movie
+3               1               1     movie
+4               1               1     movie
+5               1               1     movie
+                          primaryTitle
+1                           321 Action
+2 2025 - The World enslaved by a Virus
+3   Holnap történt - A nagy bulvárfilm
+4                                 Reis
+5       Cumali Ceber: Allah Seni Alsin</code></pre>
+</div>
+</div>
 </section>
 <section id="task-3-question-3" class="level3">
 <h3 class="anchored" data-anchor-id="task-3-question-3">Task 3 Question 3</h3>
 <p>Choose a prestige actor or director and confirm that they have many projects with high scores on your success metric.</p>
+<p>I chose <code>Leonardo DiCaprio</code>. The success metric aligns with the many projects with high scores in which he participated.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Find Leonardo DiCaprio's nconst</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>NAME_BASICS <span class="sc">|&gt;</span></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(primaryName <span class="sc">==</span> <span class="st">"Leonardo DiCaprio"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(nconst,primaryName) <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     nconst       primaryName
+1 nm0000138 Leonardo DiCaprio</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Show Leonardo DiCaprio's movies and weighted rating using descending order based on the rating</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>dicaprio_movies <span class="ot">&lt;-</span> </span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>  TITLE_PRINCIPALS <span class="sc">|&gt;</span></span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(nconst <span class="sc">==</span> <span class="st">"nm0000138"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(nconst, tconst) <span class="sc">|&gt;</span></span>
+<span id="cb73-7"><a href="#cb73-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(NEW_TITLE_RATINGS, <span class="fu">join_by</span>(tconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
+<span id="cb73-8"><a href="#cb73-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(weighted_rating, primaryTitle) <span class="sc">|&gt;</span></span>
+<span id="cb73-9"><a href="#cb73-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(primaryTitle, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb73-10"><a href="#cb73-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(weighted_rating)) <span class="sc">|&gt;</span></span>
+<span id="cb73-11"><a href="#cb73-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span>
+<span id="cb73-12"><a href="#cb73-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-13"><a href="#cb73-13" aria-hidden="true" tabindex="-1"></a>dicaprio_movies</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   weighted_rating                          primaryTitle
+1              9.5                             Episode X
+2              8.8                             Inception
+3              8.8 Inception: Jump Right Into the Action
+4              8.5                          The Departed
+5              8.5                      Django Unchained
+6              8.2               The Wolf of Wall Street
+7              8.2                        Shutter Island
+8              8.2                        The First Born
+9              8.1                   Catch Me If You Can
+10             8.0                         Blood Diamond</code></pre>
+</div>
+</div>
 </section>
 <section id="task-3-question-4" class="level3">
 <h3 class="anchored" data-anchor-id="task-3-question-4">Task 3 Question 4</h3>
 <p>Perform at least one other form of ‘spot check’ validation.</p>
+<p>The TV series <code>Mad Men</code> is considered by many (such as me and my friends) to be a masterpiece. The weighted rating correctly reflects this taking into consideration public awareness of the series.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>NEW_TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(primaryTitle <span class="sc">==</span> <span class="st">"Mad Men"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(weighted_rating)) <span class="sc">|&gt;</span></span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>quantile_weight,<span class="sc">-</span>isAdult,<span class="sc">-</span>originalTitle,<span class="sc">-</span>parentTconst,<span class="sc">-</span>seasonNumber,<span class="sc">-</span>episodeNumber,<span class="sc">-</span>parentTitle, <span class="sc">-</span>tconst, <span class="sc">-</span>numVotes, <span class="sc">-</span>startYear, <span class="sc">-</span>endYear, <span class="sc">-</span>runtimeMinutes, <span class="sc">-</span>averageRating) <span class="sc">|&gt;</span></span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  weighted_rating titleType primaryTitle genres
+1             8.7  tvSeries      Mad Men  Drama</code></pre>
+</div>
+</div>
 </section>
 <section id="task-3-question-5" class="level3">
 <h3 class="anchored" data-anchor-id="task-3-question-5">Task 3 Question 5</h3>
 <p>Come up with a numerical threshold for a project to be a ‘success’; that is, determine a value <span class="math inline">\(v\)</span> such that movies above <span class="math inline">\(v\)</span> are all “solid” or better.</p>
 <p>You will use your success metric and threshold to complete the rest of this Mini-Project. You may, if you wish, restrict your attention to movies for the remainder of your analysis, though a good development executive should also consider making TV series.</p>
+<p>I consider that the success metric created will accurately show success of a title. Success, for the purposes of this project will be defined as having a <strong><em>weighted rating</em></strong> of at least 7.5. Remember that this takes into consideration public awareness. Therefore, titles with low public awareness will not be shown in our modified table.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>MODIFIED_TITLE_RATINGS <span class="ot">&lt;-</span> NEW_TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(weighted_rating <span class="sc">&gt;=</span> <span class="fl">7.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="examining-success-by-genre-and-decade" class="level3">
-<h3 class="anchored" data-anchor-id="examining-success-by-genre-and-decade">Examining Success by Genre and Decade</h3>
+</section>
+<section id="examining-success-by-genre-and-decadeinstructor-provided-questions" class="level2">
+<h2 class="anchored" data-anchor-id="examining-success-by-genre-and-decadeinstructor-provided-questions">Examining Success by Genre and Decade:Instructor-Provided Questions</h2>
 <p>Now that you have a working proxy for success, it’s time to look at trends in success over time. Answer the following questions. Your responses should include at least 2 graphics.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Task 4: Trends in Success Over Time
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Using questions like the following, identify a good “genre” for your next film. You do not need to answer these questions precisely, but these are may help guide your thinking.</p>
-<ol type="1">
-<li>What was the genre with the most “successes” in each decade?</li>
-<li>What genre consistently has the most “successes”? What genre used to reliably produced “successes” and has fallen out of favor?</li>
-<li>What genre has produced the most “successes” since 2010? Does it have the highest success <em>rate</em> or does it only have a large number of successes because there are many productions in that genre?</li>
-<li>What genre has become more popular in recent years?</li>
-</ol>
-</div>
-</div>
-<p>Based on your findings, select a genre for your next project. Note that you may wish to avoid an “oversatured” genre; you just need to make the argument that your proposal is a <em>good</em> investment, not necessarily the most <em>studio-produced focus-grouped committee-designed generic satisfying</em> choice, so feel free to lean in to your own artistic preferences, as long as you can make an argument for them.</p>
 </section>
-<section id="successful-personnel-in-the-genre" class="level3">
-<h3 class="anchored" data-anchor-id="successful-personnel-in-the-genre">Successful Personnel in the Genre</h3>
+<section id="task-4-trends-in-success-over-time-instructor-provided-questions" class="level2">
+<h2 class="anchored" data-anchor-id="task-4-trends-in-success-over-time-instructor-provided-questions">Task 4: Trends in Success Over Time (Instructor-Provided Questions)</h2>
+<p>Using questions like the following, identify a good “genre” for your next film. You do not need to answer these questions precisely, but these are may help guide your thinking.</p>
+<section id="task-4-question-1" class="level3">
+<h3 class="anchored" data-anchor-id="task-4-question-1">Task 4 Question 1</h3>
+<p>What was the genre with the most “successes” in each decade?</p>
+<p>To answer this question I will look at each genre separately and then together with its other related genres.</p>
+<p>Let’s look at successful individual genre per decade:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>MODIFIED_TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(parentTconst, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(genres, <span class="at">sep =</span> <span class="st">","</span>) <span class="sc">|&gt;</span></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">genres =</span> <span class="fu">trimws</span>(genres),</span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">decade =</span> <span class="fu">paste0</span>(<span class="fu">floor</span>(startYear <span class="sc">/</span> <span class="dv">10</span>) <span class="sc">*</span> <span class="dv">10</span>, <span class="st">"-"</span>, <span class="fu">floor</span>(startYear <span class="sc">/</span> <span class="dv">10</span>) <span class="sc">*</span> <span class="dv">10</span> <span class="sc">+</span> <span class="dv">9</span>)</span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(decade, genres) <span class="sc">|&gt;</span></span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_weighted_rating =</span> <span class="fu">mean</span>(weighted_rating), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(decade) <span class="sc">|&gt;</span></span>
+<span id="cb78-11"><a href="#cb78-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">order_by =</span> mean_weighted_rating, <span class="at">n =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb78-12"><a href="#cb78-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(decade, genres, mean_weighted_rating) <span class="sc">|&gt;</span></span>
+<span id="cb78-13"><a href="#cb78-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 3
+   decade    genres    mean_weighted_rating
+   &lt;chr&gt;     &lt;chr&gt;                    &lt;dbl&gt;
+ 1 1900-1909 Action                    8.1 
+ 2 1900-1909 Adventure                 8.1 
+ 3 1900-1909 Comedy                    8.1 
+ 4 1950-1959 Comedy                    9.5 
+ 5 1960-1969 Horror                    8.2 
+ 6 1960-1969 Mystery                   8.2 
+ 7 1970-1979 Comedy                    8.6 
+ 8 1980-1989 War                       8.85
+ 9 1990-1999 Music                     9.3 
+10 2000-2009 Family                    9.28
+11 2010-2019 News                      9.1 
+12 2020-2029 News                      9.5 </code></pre>
+</div>
+</div>
+<p>The current decade’s most successful genre is News with an average weighted rating of 9.5.</p>
+</section>
+<section id="task-4-question-2" class="level3">
+<h3 class="anchored" data-anchor-id="task-4-question-2">Task 4 Question 2</h3>
+<p>What genre consistently has the most “successes”? What genre used to reliably produced “successes” and has fallen out of favor?</p>
+<p><code>Drama</code> has consistently had the most success. Based on the graphs, the genres <code>Mistery</code> and <code>Romance</code> seem to be the ones in decline for a while. However, those have not many “successes” as compared to other genres. The genres with most successes seem to have a fairly stable variation of success.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>MODIFIED_TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">parentTconst =</span> <span class="fu">ifelse</span>(titleType <span class="sc">==</span> <span class="st">"tvSeries"</span>, parentTconst, tconst)</span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(parentTconst, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(genres, <span class="at">sep =</span> <span class="st">","</span>) <span class="sc">|&gt;</span></span>
+<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">genres =</span> <span class="fu">trimws</span>(genres)</span>
+<span id="cb80-9"><a href="#cb80-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb80-10"><a href="#cb80-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(startYear <span class="sc">&gt;=</span> <span class="dv">2010</span>) <span class="sc">|&gt;</span></span>
+<span id="cb80-11"><a href="#cb80-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(startYear, genres) <span class="sc">|&gt;</span></span>
+<span id="cb80-12"><a href="#cb80-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">title_count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb80-13"><a href="#cb80-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> startYear, <span class="at">weight =</span> title_count)) <span class="sc">+</span></span>
+<span id="cb80-14"><a href="#cb80-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb80-15"><a href="#cb80-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> genres, <span class="at">scales =</span> <span class="st">"free_x"</span>, <span class="at">shrink =</span> <span class="cn">TRUE</span>, <span class="at">strip.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb80-16"><a href="#cb80-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Title Count by Year and Genre"</span>, <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Title Count"</span>) <span class="sc">+</span></span>
+<span id="cb80-17"><a href="#cb80-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb80-18"><a href="#cb80-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb80-19"><a href="#cb80-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb80-20"><a href="#cb80-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>, <span class="at">family =</span> <span class="st">"sans"</span>),</span>
+<span id="cb80-21"><a href="#cb80-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">face =</span> <span class="st">"bold"</span>)</span>
+<span id="cb80-22"><a href="#cb80-22" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mp02_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="task-4-question-3" class="level3">
+<h3 class="anchored" data-anchor-id="task-4-question-3">Task 4 Question 3</h3>
+<p>What genre has produced the most “successes” since 2010? Does it have the highest success <em>rate</em> or does it only have a large number of successes because there are many productions in that genre?</p>
+<p><code>Drama</code> has produced the most “successes” since 2010. There are many productions in that genre the same way there are many productions in <code>Comedy</code>. However, <code>Comedy</code> does not show as much success as <code>Drama</code> despite being the closes to the number of productions as shown below. Therefore, I conclude that <code>Drama</code> does create the most “successes.”</p>
+<p>The following table shows total “successes” per genre given our definition:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>MODIFIED_TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">parentTconst =</span> <span class="fu">ifelse</span>(titleType <span class="sc">==</span> <span class="st">"tvSeries"</span>, parentTconst, tconst)) <span class="sc">|&gt;</span></span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(parentTconst, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(genres, <span class="at">sep =</span> <span class="st">","</span>) <span class="sc">|&gt;</span></span>
+<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">genres =</span> <span class="fu">trimws</span>(genres)) <span class="sc">|&gt;</span></span>
+<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(startYear <span class="sc">&gt;=</span> <span class="dv">2010</span>) <span class="sc">|&gt;</span></span>
+<span id="cb81-7"><a href="#cb81-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(genres) <span class="sc">|&gt;</span></span>
+<span id="cb81-8"><a href="#cb81-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_title_count =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb81-9"><a href="#cb81-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_title_count)) <span class="sc">|&gt;</span></span>
+<span id="cb81-10"><a href="#cb81-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 27 × 2
+   genres    total_title_count
+   &lt;chr&gt;                 &lt;int&gt;
+ 1 Drama                 12799
+ 2 Action                 6970
+ 3 Comedy                 5557
+ 4 Adventure              5435
+ 5 Crime                  5081
+ 6 Animation              3904
+ 7 Mystery                2571
+ 8 Romance                1965
+ 9 Fantasy                1964
+10 Horror                 1487
+# ℹ 17 more rows</code></pre>
+</div>
+</div>
+<p>The following table shows total title count by genre using our initial data (not taking our success measure into consideration):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS <span class="sc">|&gt;</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(genres, <span class="at">sep =</span> <span class="st">","</span>) <span class="sc">|&gt;</span></span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(genres) <span class="sc">|&gt;</span></span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_title_count =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_title_count)) <span class="sc">|&gt;</span></span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 29 × 2
+   genres      total_title_count
+   &lt;chr&gt;                   &lt;int&gt;
+ 1 Drama                  177185
+ 2 Comedy                 126366
+ 3 Action                  72347
+ 4 Crime                   60989
+ 5 Adventure               57111
+ 6 Animation               47568
+ 7 Romance                 41456
+ 8 Mystery                 33202
+ 9 Thriller                27860
+10 Documentary             27580
+# ℹ 19 more rows</code></pre>
+</div>
+</div>
+<p>The following histograms show total successful titles by genre since 2010:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>MODIFIED_TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">parentTconst =</span> <span class="fu">ifelse</span>(titleType <span class="sc">==</span> <span class="st">"tvSeries"</span>, parentTconst, tconst)</span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(parentTconst, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(genres, <span class="at">sep =</span> <span class="st">","</span>) <span class="sc">|&gt;</span></span>
+<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">genres =</span> <span class="fu">trimws</span>(genres)</span>
+<span id="cb85-9"><a href="#cb85-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb85-10"><a href="#cb85-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(startYear <span class="sc">&gt;=</span> <span class="dv">2010</span>) <span class="sc">|&gt;</span></span>
+<span id="cb85-11"><a href="#cb85-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(startYear, genres) <span class="sc">|&gt;</span></span>
+<span id="cb85-12"><a href="#cb85-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">title_count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb85-13"><a href="#cb85-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> startYear, <span class="at">weight =</span> title_count)) <span class="sc">+</span></span>
+<span id="cb85-14"><a href="#cb85-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">orientation =</span> <span class="st">"x"</span>) <span class="sc">+</span></span>
+<span id="cb85-15"><a href="#cb85-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> genres, <span class="at">scales =</span> <span class="st">"free_x"</span>, <span class="at">shrink =</span> <span class="cn">TRUE</span>, <span class="at">strip.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb85-16"><a href="#cb85-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Title Count by Year and Genre since 2010"</span>, <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Title Count"</span>) <span class="sc">+</span></span>
+<span id="cb85-17"><a href="#cb85-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb85-18"><a href="#cb85-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb85-19"><a href="#cb85-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb85-20"><a href="#cb85-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">12</span>, <span class="at">family =</span> <span class="st">"sans"</span>),</span>
+<span id="cb85-21"><a href="#cb85-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb85-22"><a href="#cb85-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.spacing =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">"cm"</span>)</span>
+<span id="cb85-23"><a href="#cb85-23" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mp02_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid figure-img" width="2880"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="task-4-question-4" class="level3">
+<h3 class="anchored" data-anchor-id="task-4-question-4">Task 4 Question 4</h3>
+<p>What genre has become more popular in recent years?</p>
+<p>Based on your findings, select a genre for your next project. Note that you may wish to avoid an “oversatured” genre; you just need to make the argument that your proposal is a <em>good</em> investment, not necessarily the most <em>studio-produced focus-grouped committee-designed generic satisfying</em> choice, so feel free to lean in to your own artistic preferences, as long as you can make an argument for them.</p>
+<p>As we have seen in the graph above, and as we see in the graph below, <code>Drama</code> has been and is becoming more popular in recent years. For this reason, I will propose the <code>Drama</code> genre. Some might think this is an over saturated genre. However, based on the data and graphs we previously saw, it seems that the great amount of supply of <code>Drama</code> titles is driven by consumer demand.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>MODIFIED_TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(parentTconst, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(genres, <span class="at">sep =</span> <span class="st">","</span>) <span class="sc">|&gt;</span></span>
+<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">genres =</span> <span class="fu">trimws</span>(genres)</span>
+<span id="cb86-6"><a href="#cb86-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb86-7"><a href="#cb86-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(startYear <span class="sc">&gt;=</span> <span class="dv">2010</span>) <span class="sc">|&gt;</span></span>
+<span id="cb86-8"><a href="#cb86-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(startYear, genres) <span class="sc">|&gt;</span></span>
+<span id="cb86-9"><a href="#cb86-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_weighted_rating =</span> <span class="fu">mean</span>(weighted_rating), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb86-10"><a href="#cb86-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(startYear), <span class="at">y =</span> mean_weighted_rating)) <span class="sc">+</span></span>
+<span id="cb86-11"><a href="#cb86-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb86-12"><a href="#cb86-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean Weighted Rating by Year (Since 2010)"</span>) <span class="sc">+</span></span>
+<span id="cb86-13"><a href="#cb86-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb86-14"><a href="#cb86-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb86-15"><a href="#cb86-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb86-16"><a href="#cb86-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb86-17"><a href="#cb86-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>, <span class="at">family =</span> <span class="st">"sans"</span>),</span>
+<span id="cb86-18"><a href="#cb86-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb86-19"><a href="#cb86-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.labels =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb86-20"><a href="#cb86-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">face =</span> <span class="st">"bold"</span>)</span>
+<span id="cb86-21"><a href="#cb86-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb86-22"><a href="#cb86-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> genres, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">labeller =</span> <span class="fu">labeller</span>(<span class="at">genres =</span> <span class="fu">label_wrap_gen</span>()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mp02_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="successful-personnel-in-the-genre-instructor-provided-questions" class="level2">
+<h2 class="anchored" data-anchor-id="successful-personnel-in-the-genre-instructor-provided-questions">Successful Personnel in the Genre: Instructor-Provided Questions</h2>
 <p>Now that you have selected a target genre, identify two actors and one director who will anchor your project. You want to identify key personnel who have worked in the genre before, with at least modest success, and who have at least one major success to their credit.</p>
 <p>As you develop your team, you may want to consider the following possibilities:</p>
 <ul>
@@ -800,51 +1118,282 @@ Task 4: Trends in Success Over Time
 <li>A pair of established actors who have had success in many genres</li>
 </ul>
 <p>As you select your key personnel, consider what IMDb says they are known for; this will be useful in developing your marketing materials.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Task 5: Key Personnel
-</div>
-</div>
-<div class="callout-body-container callout-body">
+</section>
+<section id="task-5-key-personnel-instructor-provided-questions" class="level2">
+<h2 class="anchored" data-anchor-id="task-5-key-personnel-instructor-provided-questions">Task 5: Key Personnel: Instructor-Provided Questions</h2>
 <p>Identify (at least) two actors and one director who you will target as the key talent for your movie. Write a short “pitch” as to why they are likely to be successful. You should support your pitch with at least one graphic and one table.</p>
+<section id="task-5-key-personnel" class="level3">
+<h3 class="anchored" data-anchor-id="task-5-key-personnel">Task 5: Key Personnel</h3>
+<p>I chose: Storm Reid as the young actress, Richard Schiff as the experienced actor, and Daniel Attias as the experienced director.</p>
+<p>Finding a young actor (born after 2000) with experience and sucess:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>NEW_TITLE_RATINGS_WITH_BIRTHYEAR <span class="ot">&lt;-</span> </span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>  TITLE_PRINCIPALS <span class="sc">|&gt;</span></span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(NEW_TITLE_RATINGS, <span class="fu">join_by</span>(tconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(NAME_TITLE_BASICS, <span class="fu">join_by</span>(nconst <span class="sc">==</span> nconst))</span>
+<span id="cb87-5"><a href="#cb87-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-6"><a href="#cb87-6" aria-hidden="true" tabindex="-1"></a>successful_young_actor <span class="ot">&lt;-</span> </span>
+<span id="cb87-7"><a href="#cb87-7" aria-hidden="true" tabindex="-1"></a>  NEW_TITLE_RATINGS_WITH_BIRTHYEAR <span class="sc">|&gt;</span></span>
+<span id="cb87-8"><a href="#cb87-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(genres.x <span class="sc">==</span> <span class="st">"Drama"</span>, </span>
+<span id="cb87-9"><a href="#cb87-9" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!</span><span class="fu">is.na</span>(nconst), </span>
+<span id="cb87-10"><a href="#cb87-10" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!</span><span class="fu">is.na</span>(primaryName), </span>
+<span id="cb87-11"><a href="#cb87-11" aria-hidden="true" tabindex="-1"></a>         birthYear <span class="sc">&gt;</span> <span class="dv">2000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb87-12"><a href="#cb87-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(nconst, primaryName, birthYear, weighted_rating) <span class="sc">|&gt;</span></span>
+<span id="cb87-13"><a href="#cb87-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_weighted_rating =</span> <span class="fu">mean</span>(weighted_rating), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb87-14"><a href="#cb87-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mean_weighted_rating))</span>
+<span id="cb87-15"><a href="#cb87-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-16"><a href="#cb87-16" aria-hidden="true" tabindex="-1"></a>successful_young_actor <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 5
+   nconst     primaryName         birthYear weighted_rating mean_weighted_rating
+   &lt;chr&gt;      &lt;chr&gt;                   &lt;dbl&gt;           &lt;dbl&gt;                &lt;dbl&gt;
+ 1 nm10837236 Deepali Gautam           2001             9.5                  9.5
+ 2 nm4977564  Storm Reid               2003             9.5                  9.5
+ 3 nm9937520  Javon 'Wanna' Walt…      2006             9.5                  9.5
+ 4 nm8915757  Susanna Skaggs           2001             9.4                  9.4
+ 5 nm10837236 Deepali Gautam           2001             9.3                  9.3
+ 6 nm10837236 Deepali Gautam           2001             9.2                  9.2
+ 7 nm10837236 Deepali Gautam           2001             9.1                  9.1
+ 8 nm9937520  Javon 'Wanna' Walt…      2006             9.1                  9.1
+ 9 nm14291803 Ashraful Tushar          2003             9                    9  
+10 nm4977564  Storm Reid               2003             9                    9  </code></pre>
+</div>
+</div>
+<p>Finding an experienced actor:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>most_experienced_actor <span class="ot">&lt;-</span> NEW_TITLE_RATINGS_WITH_BIRTHYEAR <span class="sc">|&gt;</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(genres.x <span class="sc">==</span> <span class="st">"Drama"</span>, <span class="sc">!</span><span class="fu">is.na</span>(nconst), <span class="sc">!</span><span class="fu">is.na</span>(primaryName)) <span class="sc">|&gt;</span></span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(nconst, primaryName) <span class="sc">|&gt;</span></span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">title_count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(title_count))</span>
+<span id="cb89-6"><a href="#cb89-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-7"><a href="#cb89-7" aria-hidden="true" tabindex="-1"></a>most_experienced_actor <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   nconst    primaryName         title_count
+   &lt;chr&gt;     &lt;chr&gt;                     &lt;int&gt;
+ 1 nm0771493 Richard Schiff             1140
+ 2 nm0212858 Liz Dean                    848
+ 3 nm0505448 Hagai Levi                  820
+ 4 nm0001624 Oliver Platt                768
+ 5 nm0003896 Eric Dawson                 768
+ 6 nm0471740 Carol Kritzer               744
+ 7 nm0580924 S. Epatha Merkerson         724
+ 8 nm0815070 Aaron Sorkin                716
+ 9 nm0937725 Dick Wolf                   712
+10 nm1631709 Matt Olmstead               708</code></pre>
+</div>
+</div>
+<p>Richard Schiff’s age is 69 and he has been part of 285 titles</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>richard_schiff_YOB <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(primaryName <span class="sc">==</span> <span class="st">"Richard Schiff"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(birthYear) <span class="sc">|&gt;</span></span>
+<span id="cb91-4"><a href="#cb91-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
+<span id="cb91-5"><a href="#cb91-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-6"><a href="#cb91-6" aria-hidden="true" tabindex="-1"></a><span class="dv">2024</span> <span class="sc">-</span> richard_schiff_YOB</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 69</code></pre>
+</div>
+</div>
+<p>Finding an experienced director:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>most_experienced_director <span class="ot">&lt;-</span> NEW_TITLE_RATINGS_WITH_BIRTHYEAR <span class="sc">|&gt;</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(genres.x <span class="sc">==</span> <span class="st">"Drama"</span>, job <span class="sc">==</span> <span class="st">"director"</span>, <span class="sc">!</span><span class="fu">is.na</span>(nconst), <span class="sc">!</span><span class="fu">is.na</span>(primaryName), <span class="sc">!</span><span class="fu">is.na</span>(job)) <span class="sc">|&gt;</span></span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(nconst, primaryName) <span class="sc">|&gt;</span></span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">title_count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(title_count))</span>
+<span id="cb93-6"><a href="#cb93-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-7"><a href="#cb93-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-8"><a href="#cb93-8" aria-hidden="true" tabindex="-1"></a>most_experienced_director <span class="sc">|&gt;</span></span>
+<span id="cb93-9"><a href="#cb93-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   nconst    primaryName         title_count
+   &lt;chr&gt;     &lt;chr&gt;                     &lt;int&gt;
+ 1 nm4904858 Mohammad Kart                76
+ 2 nm0003733 Daniel Attias                52
+ 3 nm9778554 Hakan Inan                   52
+ 4 nm1246883 Mac Alejandre                40
+ 5 nm0482774 Joel Lamangan                36
+ 6 nm2639311 Kit Williamson               36
+ 7 nm0054219 Juan Antonio Bardem          32
+ 8 nm0386382 Ryûichi Hiroki               32
+ 9 nm0407990 Im Kwon-taek                 32
+10 nm0606845 Patrick R. Norris            32</code></pre>
+</div>
+</div>
+<p>Daniel Attias has been involved in 52 titles.</p>
+<p>The tables above show successful individuals in the <code>Drama</code> genre. They are part of the data that made the cut for our definition of success. And all of them have a lot of experience. Even the young actress, is one of the most experienced out of the filtered group. As we can see in the following graph, this makes a great team which displays experience and quality. Although Storm Reid has less experience than the rest of the team, she is a young actress with a continually increasing rated titles.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>THE_TEAM <span class="ot">&lt;-</span> NEW_TITLE_RATINGS_WITH_BIRTHYEAR <span class="sc">|&gt;</span></span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(primaryName <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Storm Reid"</span>, <span class="st">"Richard Schiff"</span>, <span class="st">"Daniel Attias"</span>))</span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a>SUMMARY_THE_TEAM <span class="ot">&lt;-</span> THE_TEAM <span class="sc">|&gt;</span></span>
+<span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>(primaryName, startYear.x) <span class="sc">|&gt;</span></span>
+<span id="cb95-6"><a href="#cb95-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(<span class="at">rating =</span> <span class="fu">mean</span>(weighted_rating, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb95-7"><a href="#cb95-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-8"><a href="#cb95-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-9"><a href="#cb95-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(SUMMARY_THE_TEAM, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(startYear.x), <span class="at">y =</span> rating)) <span class="sc">+</span></span>
+<span id="cb95-10"><a href="#cb95-10" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb95-11"><a href="#cb95-11" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Average Ratings Across Years"</span>,</span>
+<span id="cb95-12"><a href="#cb95-12" aria-hidden="true" tabindex="-1"></a><span class="at">subtitle =</span> <span class="st">"Storm Reid, Richard Schiff, Daniel Attias"</span>,</span>
+<span id="cb95-13"><a href="#cb95-13" aria-hidden="true" tabindex="-1"></a><span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb95-14"><a href="#cb95-14" aria-hidden="true" tabindex="-1"></a><span class="at">y =</span> <span class="st">"Average Rating"</span>) <span class="sc">+</span></span>
+<span id="cb95-15"><a href="#cb95-15" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb95-16"><a href="#cb95-16" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb95-17"><a href="#cb95-17" aria-hidden="true" tabindex="-1"></a><span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb95-18"><a href="#cb95-18" aria-hidden="true" tabindex="-1"></a><span class="fu">facet_wrap</span>(<span class="sc">~</span> primaryName)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mp02_files/figure-html/unnamed-chunk-44-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Below, we can see what title in the <code>Drama</code> genre they are known for:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>NEW_TITLE_RATINGS_WITH_BIRTHYEAR <span class="sc">|&gt;</span></span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(primaryName <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Storm Reid"</span>, <span class="st">"Richard Schiff"</span>, <span class="st">"Daniel Attias"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(TITLE_BASICS, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"tconst"</span> <span class="ot">=</span> <span class="st">"tconst"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">KnownForTitleName =</span> primaryTitle) <span class="sc">|&gt;</span></span>
+<span id="cb96-5"><a href="#cb96-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(genres <span class="sc">==</span> <span class="st">"Drama"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb96-6"><a href="#cb96-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(primaryName, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb96-7"><a href="#cb96-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryName, primaryTitle.x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     primaryName                   primaryTitle.x
+1 Richard Schiff                    The West Wing
+2  Daniel Attias                     Kingdom Come
+3     Storm Reid Stand Still Like the Hummingbird</code></pre>
 </div>
 </div>
 </section>
-<section id="nostalgia-and-remakes" class="level3">
-<h3 class="anchored" data-anchor-id="nostalgia-and-remakes">Nostalgia and Remakes</h3>
+</section>
+<section id="nostalgia-and-remakes-instructor-provided-questions" class="level2">
+<h2 class="anchored" data-anchor-id="nostalgia-and-remakes-instructor-provided-questions">Nostalgia and Remakes: Instructor-Provided Questions</h2>
 <p>Now that you have found a target genre and key talent for your project, you need a story. Like any good development executive, your first instinct should be to produce a remake of a classic film in the genre.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Task 6: Finding a Classic Movie to Remake
-</div>
-</div>
-<div class="callout-body-container callout-body">
+</section>
+<section id="task-6-finding-a-classic-movie-to-remake-instructor-provided-questions" class="level2">
+<h2 class="anchored" data-anchor-id="task-6-finding-a-classic-movie-to-remake-instructor-provided-questions">Task 6: Finding a Classic Movie to Remake: Instructor-Provided Questions</h2>
 <p>Find a classic movie to remake with your key talent. The original should have a large number of IMDb ratings, a high average rating, and not have been remade in the past 25 years.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>Once you have found your classic movie to remake, confirm whether key actors, directors, or writers from the original are still alive. If so, you need to contact your legal department to ensure they can secure the rights to the project. You may also want to include the classic actors as “fan service.”</p>
+<p>The question does not specify genre, but does specify title type. I believe in the versatility of the team chosen so let’s find the movie.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>task6_table <span class="ot">&lt;-</span> NEW_TITLE_RATINGS_WITH_BIRTHYEAR <span class="sc">|&gt;</span></span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType.x <span class="sc">==</span> <span class="st">"movie"</span>, numVotes <span class="sc">&gt;</span> <span class="dv">100000</span>)</span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a>task6_table <span class="sc">|&gt;</span> </span>
+<span id="cb98-5"><a href="#cb98-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tconst, primaryTitle.x, genres.x) <span class="sc">|&gt;</span></span>
+<span id="cb98-6"><a href="#cb98-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>( <span class="at">Average_Weighted_Rating =</span> <span class="fu">mean</span>(weighted_rating), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb98-7"><a href="#cb98-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Average_Weighted_Rating)) <span class="sc">|&gt;</span></span>
+<span id="cb98-8"><a href="#cb98-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryTitle.x, genres.x, Average_Weighted_Rating) <span class="sc">|&gt;</span></span>
+<span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   primaryTitle.x                                genres.x Average_Weighted_Rat…¹
+   &lt;chr&gt;                                         &lt;chr&gt;                     &lt;dbl&gt;
+ 1 The Shawshank Redemption                      Drama                       9.3
+ 2 The Godfather                                 Crime,D…                    9.2
+ 3 12 Angry Men                                  Crime,D…                    9  
+ 4 The Godfather Part II                         Crime,D…                    9  
+ 5 Schindler's List                              Biograp…                    9  
+ 6 The Lord of the Rings: The Return of the King Action,…                    9  
+ 7 The Dark Knight                               Action,…                    9  
+ 8 Pulp Fiction                                  Crime,D…                    8.9
+ 9 The Lord of the Rings: The Fellowship of the… Action,…                    8.9
+10 The Good, the Bad and the Ugly                Adventu…                    8.8
+# ℹ abbreviated name: ¹​Average_Weighted_Rating</code></pre>
 </div>
 </div>
-</section>
+<p>I have created the table above filtering our data for movies with more than 100,000 votes. The top movie is <strong><em>The Shawshank Redemption</em></strong> and its genre is <code>Drama</code> which fits perfectly with our team. As we can see below, there is only one title with that name in our data set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS <span class="sc">|&gt;</span></span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(primaryTitle <span class="sc">==</span> <span class="st">"The Shawshank Redemption"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>tconst, <span class="sc">-</span>originalTitle, <span class="sc">-</span>isAdult, <span class="sc">-</span>endYear)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  titleType             primaryTitle startYear runtimeMinutes genres
+1     movie The Shawshank Redemption      1994            142  Drama</code></pre>
+</div>
+</div>
+<p>The following people participated in this production in different capacities. They are less than 100 years old and they might be alive. We can contact them to secure rights.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>NEW_TITLE_RATINGS_WITH_BIRTHYEAR <span class="sc">|&gt;</span></span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tconst <span class="sc">==</span> <span class="st">"tt0111161"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(deathYear)) <span class="sc">|&gt;</span></span>
+<span id="cb102-4"><a href="#cb102-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(birthYear <span class="sc">&gt;</span> <span class="st">"1924"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb102-5"><a href="#cb102-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryName, primaryProfession)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             primaryName                               primaryProfession
+1            Tim Robbins                         actor,producer,director
+2            Tim Robbins                         actor,producer,director
+3            Tim Robbins                         actor,producer,director
+4            Tim Robbins                         actor,producer,director
+5         Morgan Freeman                         actor,producer,director
+6         Morgan Freeman                         actor,producer,director
+7         Morgan Freeman                         actor,producer,director
+8         Morgan Freeman                         actor,producer,director
+9             Bob Gunton                actor,soundtrack,archive_footage
+10            Bob Gunton                actor,soundtrack,archive_footage
+11            Bob Gunton                actor,soundtrack,archive_footage
+12            Bob Gunton                actor,soundtrack,archive_footage
+13        William Sadler                         actor,producer,director
+14        William Sadler                         actor,producer,director
+15        William Sadler                         actor,producer,director
+16        William Sadler                         actor,producer,director
+17          Clancy Brown                       actor,producer,soundtrack
+18          Clancy Brown                       actor,producer,soundtrack
+19          Clancy Brown                       actor,producer,soundtrack
+20          Clancy Brown                       actor,producer,soundtrack
+21           Gil Bellows                         actor,producer,director
+22           Gil Bellows                         actor,producer,director
+23           Gil Bellows                         actor,producer,director
+24           Gil Bellows                         actor,producer,director
+25          Mark Rolston                   actor,sound_department,writer
+26          Mark Rolston                   actor,sound_department,writer
+27          Mark Rolston                   actor,sound_department,writer
+28          Mark Rolston                   actor,sound_department,writer
+29        Jeffrey DeMunn                           actor,archive_footage
+30        Jeffrey DeMunn                           actor,archive_footage
+31        Jeffrey DeMunn                           actor,archive_footage
+32        Jeffrey DeMunn                           actor,archive_footage
+33     Larry Brandenburg                             actor,archive_sound
+34     Larry Brandenburg                             actor,archive_sound
+35     Larry Brandenburg                             actor,archive_sound
+36     Larry Brandenburg                             actor,archive_sound
+37        Frank Darabont                        writer,producer,director
+38        Frank Darabont                        writer,producer,director
+39        Frank Darabont                        writer,producer,director
+40        Frank Darabont                        writer,producer,director
+41          Stephen King                           writer,producer,actor
+42          Stephen King                           writer,producer,actor
+43          Stephen King                           writer,producer,actor
+44          Stephen King                           writer,producer,actor
+45        Frank Darabont                        writer,producer,director
+46        Frank Darabont                        writer,producer,director
+47        Frank Darabont                        writer,producer,director
+48        Frank Darabont                        writer,producer,director
+49         Thomas Newman            music_department,composer,soundtrack
+50         Thomas Newman            music_department,composer,soundtrack
+51         Thomas Newman            music_department,composer,soundtrack
+52         Thomas Newman            music_department,composer,soundtrack
+53         Roger Deakins cinematographer,camera_department,miscellaneous
+54         Roger Deakins cinematographer,camera_department,miscellaneous
+55         Roger Deakins cinematographer,camera_department,miscellaneous
+56         Roger Deakins cinematographer,camera_department,miscellaneous
+57 Richard Francis-Bruce    editor,editorial_department,sound_department
+58 Richard Francis-Bruce    editor,editorial_department,sound_department
+59 Richard Francis-Bruce    editor,editorial_department,sound_department
+60 Richard Francis-Bruce    editor,editorial_department,sound_department</code></pre>
+</div>
+</div>
 </section>
 <section id="putting-it-together" class="level2">
 <h2 class="anchored" data-anchor-id="putting-it-together">Putting It Together</h2>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Task 7: Write and Deliver Your Pitch
-</div>
-</div>
-<div class="callout-body-container callout-body">
+</section>
+<section id="task-7-write-and-deliver-your-pitch-instructor-provided-questions" class="level2">
+<h2 class="anchored" data-anchor-id="task-7-write-and-deliver-your-pitch-instructor-provided-questions">Task 7: Write and Deliver Your Pitch: Instructor-Provided Questions</h2>
 <p>Now that you have completed your analysis, write an “elevator pitch” of approximately 200-250 words for your proposed Hollywood project. This is the pitch you will bring to the studio head (your boss); if the studio head likes your pitch, you will be given a small sum of money to start securing the story rights and locking down tentative deals with key talent.</p>
 <p>Your pitch needs to synthesize the analysis above into two to three quick and compelling points. (<em>E.g.</em>, “The market for animated young adult horror musicals has grown 200% in the past decade” or “Over 90% of Director D’s movies are successes.”) You need to present the strongest argument for each element of your pitch, including genre, director, actors, and story.</p>
 <p>If your boss approves the pitch, you will need to have a brief trailer ready for the next quarterly earnings call. The marketing department has asked that you prepare a classic 90’s style teaser for them. Adapt the following cliched formula for your pitch.</p>
@@ -852,16 +1401,21 @@ Task 7: Write and Deliver Your Pitch
 <p>From director D, the visionary mind between N1; and From actor A, beloved star of N2; and From actor A2, Hollywood icon of genre G, Comes the timeless tail N3 A story of TOPIC, TOPIC, and TOPIC Coming soon to a theater near you.</p>
 </blockquote>
 <p>If you’re creatively-minded, you could have some fun here using Generative tools to draft a script or mock up a movie poster for your pitch.</p>
-</div>
-</div>
-</section>
-<section id="general-remarks" class="level2">
-<h2 class="anchored" data-anchor-id="general-remarks">General Remarks</h2>
-<p>As you approach this project, recall there are no right or wrong answers. You are exploring data looking for <em>exciting</em> and <em>actionable</em> findings. You have several key decisions to make and you can support them with data, but the decisions are ultimately yours. This project is an exercise both in the “nuts-and-bolts” of analyzing a large data set and in using data to inform and refine what is ultimately still a “gut feeling” qualitative business decision.</p>
+<section id="task-7-write-and-deliver-your-pitch" class="level3">
+<h3 class="anchored" data-anchor-id="task-7-write-and-deliver-your-pitch">Task 7: Write and Deliver Your Pitch</h3>
+<p>Based on IMDb data, I conducted research in order to find the best industry to launch our new project. After creating a metric of success that takes into consideration the public awareness of the title, I found that Drama is the best genre for our project. To work on this project, we will need the best talent. Therefore, I have selected the following individuals for the following roles (see known for titles next to their names):</p>
+<ul>
+<li>Actress: Storm Reid - <em>Stand Still Like the Hummingbird</em></li>
+<li>Actor: Richard Schiff - <em>The West Wing</em></li>
+<li>Director: Daniel Attias - <em>Kingdom Come</em></li>
+</ul>
+<p>Our team has the experience of our Director and our Actor, both of which have many years of experience in the industry. We also have a young Actress, who despite her youth, has been able to achieve great success by being part of many successful and well known titles. All of them, have been part of titles with an average weighted rating above 7.5. This measure reflects public awareness and quality of the production. We would like to tap into the public awareness and good reception of the movie <strong><em>The Shawshank Redemption</em></strong> and make a remake of this classic. This is a great movie in the <code>Drama</code> genre with an average weighted rating of 9.3.</p>
+<p>Given the public’s strong demand for <code>Drama</code> titles, and the strong team I have selected, I am confident we can create a successful title.</p>
 <hr>
 <p>Credits to <a href="https://michael-weylandt.com">Michael Weylandt</a> who provided a great part of the code for the data gathering and cleaning process.</p>
 
 
+</section>
 </section>
 
 

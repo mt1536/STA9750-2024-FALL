@@ -264,14 +264,13 @@ current_year <- year(Sys.Date())
 oldest_living_person <- NAME_BASICS |>
   filter(birthYear > 1904, is.na(deathYear)) |>
   arrange(birthYear) |>
-  head(5) |>
-  mutate(age = current_year - birthYear) |>
-  glimpse(width = 100, max.extra.cols = Inf)
+  mutate(age = current_year - birthYear)
 
-
-
-
-oldest_living_person
+oldest_living_person |>
+  select(primaryName, birthYear, age) |>
+  distinct(primaryName, .keep_all = TRUE) |>
+  group_by(primaryName) |>
+  head(5)
 
 ```
 
@@ -478,7 +477,7 @@ NEW_TITLE_RATINGS <- full_join(TITLE_RATINGS, TITLE_BASICS, join_by(tconst == tc
 NEW_TITLE_RATINGS |>
   filter(titleType == "movie") |>
   arrange(desc(weighted_rating)) |>
-  select(-parentTitle, -episodeNumber, -seasonNumber, -parentTconst, -isAdult, -tconst, quantile_weight, -averageRating, -endYear) |>
+  select(-parentTitle, -episodeNumber, -seasonNumber, -parentTconst, -isAdult, -tconst, -quantile_weight, -averageRating, -endYear, -originalTitle, -runtimeMinutes) |>
   head(10)
 
 
@@ -494,7 +493,7 @@ The following shows titles for which the maximum weight was applied and yet the 
 NEW_TITLE_RATINGS |>
   filter(titleType == "movie", quantile_weight == 1) |>
   arrange(weighted_rating) |>
-  select(-parentTitle, -episodeNumber, -seasonNumber, -parentTconst, -isAdult, -tconst, quantile_weight, -averageRating, -endYear) |>
+  select(-parentTitle, -episodeNumber, -seasonNumber, -parentTconst, -isAdult, -tconst, -averageRating, -endYear, -originalTitle, -numVotes, -startYear, -runtimeMinutes, -genres) |>
   head(5)
 
 
@@ -506,17 +505,28 @@ Choose a prestige actor or director and confirm that they have many projects wit
 
 I chose `Leonardo DiCaprio`. The success metric aligns with the many projects with high scores in which he participated.
 
+
 ```{r}
+#Find Leonardo DiCaprio's nconst
+NAME_BASICS |>
+  filter(primaryName == "Leonardo DiCaprio") |> select(nconst,primaryName) |> head(1)
+```
 
-NEW_TITLE_RATINGS <- NEW_TITLE_RATINGS |>
-  mutate(Individual_Name = TITLE_PRINCIPALS$primaryName[match(NEW_TITLE_RATINGS$nconst, TITLE_PRINCIPALS$nconst)])
 
-NEW_TITLE_RATINGS |>
-  filter(Individual_Name == "Leonardo DiCaprio") |>
+```{r}
+#Show Leonardo DiCaprio's movies and weighted rating using descending order based on the rating
+
+dicaprio_movies <- 
+  TITLE_PRINCIPALS |>
+  filter(nconst == "nm0000138") |>
+  select(nconst, tconst) |>
+  inner_join(NEW_TITLE_RATINGS, join_by(tconst == tconst)) |>
+  select(weighted_rating, primaryTitle) |>
+  distinct(primaryTitle, .keep_all = TRUE) |>
   arrange(desc(weighted_rating)) |>
-  select(-ordering,-averageRating,-tconst,-quantile_weight,-isAdult,-endYear,-originalTitle) |>
   head(10)
 
+dicaprio_movies
 ```
 
 ### Task 3 Question 4
@@ -529,8 +539,7 @@ The TV series `Mad Men` is considered by many (such as me and my friends) to be 
 NEW_TITLE_RATINGS |>
   filter(primaryTitle == "Mad Men") |>
   arrange(desc(weighted_rating)) |>
-  select(
-    -ordering, -averageRating, -tconst, -isAdult, -endYear, -originalTitle, -parentTconst, -seasonNumber, -episodeNumber, -parentTitle) |>
+  select(-quantile_weight,-isAdult,-originalTitle,-parentTconst,-seasonNumber,-episodeNumber,-parentTitle, -tconst, -numVotes, -startYear, -endYear, -runtimeMinutes, -averageRating) |>
   head(1)
 ```
 
@@ -754,14 +763,20 @@ Finding a young actor (born after 2000) with experience and sucess:
 ```{r}
 #| warning: false
 
-successful_young_actor <- NEW_TITLE_RATINGS_WITH_BIRTHYEAR |>
-  filter(genres == "Drama", 
+NEW_TITLE_RATINGS_WITH_BIRTHYEAR <- 
+  TITLE_PRINCIPALS |>
+  left_join(NEW_TITLE_RATINGS, join_by(tconst == tconst)) |>
+  left_join(NAME_TITLE_BASICS, join_by(nconst == nconst))
+
+successful_young_actor <- 
+  NEW_TITLE_RATINGS_WITH_BIRTHYEAR |>
+  filter(genres.x == "Drama", 
          !is.na(nconst), 
-         !is.na(Individual_Name),
+         !is.na(primaryName), 
          birthYear > 2000) |>
-  group_by(nconst, Individual_Name, birthYear, weighted_rating) |>
-  summarise(mean_weighted_rating = mean(weighted_rating)) |>
-  arrange(desc(mean_weighted_rating)) 
+  group_by(nconst, primaryName, birthYear, weighted_rating) |>
+  summarise(mean_weighted_rating = mean(weighted_rating), .groups = "drop") |>
+  arrange(desc(mean_weighted_rating))
 
 successful_young_actor |> head(10)
 ```
@@ -770,28 +785,27 @@ Finding an experienced actor:
 
 ```{r}
 #| warning: false
-most_experienced_actor <- NEW_TITLE_RATINGS |>
-  filter(genres == "Drama", !is.na(nconst), !is.na(Individual_Name)) |>
-  group_by(nconst, Individual_Name) |>
-  summarise(title_count = n()) |>
+most_experienced_actor <- NEW_TITLE_RATINGS_WITH_BIRTHYEAR |>
+  filter(genres.x == "Drama", !is.na(nconst), !is.na(primaryName)) |>
+  group_by(nconst, primaryName) |>
+  summarise(title_count = n(), .groups = "drop") |>
   arrange(desc(title_count))
 
-most_experienced_actor |>
-  head(10)
+most_experienced_actor |> head(10)
+
 
 ```
 
-Richar Schiff's age is 69 and has been part of 285 titles
+Richard Schiff's age is 69 and he has been part of 285 titles
 
 ```{r}
 
-richard_schiff_YOB<-NAME_BASICS |>
+richard_schiff_YOB <- NAME_BASICS |>
   filter(primaryName == "Richard Schiff") |>
   pull(birthYear) |>
-  first()
+  unique()
 
-sum(2024-richard_schiff_YOB)
-
+2024 - richard_schiff_YOB
 
 ```
 
@@ -800,10 +814,11 @@ Finding an experienced director:
 ```{r}
 #| warning: false
 most_experienced_director <- NEW_TITLE_RATINGS_WITH_BIRTHYEAR |>
-  filter(genres == "Drama", job == "director", !is.na(nconst), !is.na(Individual_Name), !is.na(job)) |>
-  group_by(nconst, Individual_Name) |>
-  summarise(title_count = n()) |>
+  filter(genres.x == "Drama", job == "director", !is.na(nconst), !is.na(primaryName), !is.na(job)) |>
+  group_by(nconst, primaryName) |>
+  summarise(title_count = n(), .groups = "drop") |>
   arrange(desc(title_count))
+
 
 most_experienced_director |>
   head(10)
@@ -818,13 +833,14 @@ The tables above show successful individuals in the `Drama` genre. They are part
 ```{r}
 
 THE_TEAM <- NEW_TITLE_RATINGS_WITH_BIRTHYEAR |>
-filter(Individual_Name %in% c("Storm Reid", "Richard Schiff", "Daniel Attias"))
+filter(primaryName %in% c("Storm Reid", "Richard Schiff", "Daniel Attias"))
 
 SUMMARY_THE_TEAM <- THE_TEAM |>
-group_by(Individual_Name, startYear) |>
-summarise(rating = mean(weighted_rating, na.rm = TRUE))
+group_by(primaryName, startYear.x) |>
+summarise(rating = mean(weighted_rating, na.rm = TRUE), .groups = "drop")
 
-ggplot(SUMMARY_THE_TEAM, aes(x = factor(startYear), y = rating)) +
+
+ggplot(SUMMARY_THE_TEAM, aes(x = factor(startYear.x), y = rating)) +
 geom_bar(stat = "identity") +
 labs(title = "Average Ratings Across Years",
 subtitle = "Storm Reid, Richard Schiff, Daniel Attias",
@@ -833,7 +849,7 @@ y = "Average Rating") +
 theme_classic() +
 theme(axis.text.x = element_blank(),
 axis.ticks.x = element_blank()) +
-facet_wrap(~ Individual_Name)
+facet_wrap(~ primaryName)
 
 
 ```
@@ -841,12 +857,13 @@ facet_wrap(~ Individual_Name)
 Below, we can see what title in the `Drama` genre they are known for:
 
 ```{r}
-TITLE_PRINCIPALS |>
+NEW_TITLE_RATINGS_WITH_BIRTHYEAR |>
   filter(primaryName %in% c("Storm Reid", "Richard Schiff", "Daniel Attias")) |>
   left_join(TITLE_BASICS, by = c("tconst" = "tconst")) |>
   mutate(KnownForTitleName = primaryTitle) |>
   filter(genres == "Drama") |>
-  distinct(primaryName, .keep_all = TRUE)
+  distinct(primaryName, .keep_all = TRUE) |>
+  select(primaryName, primaryTitle.x)
 
 ```
 
@@ -866,12 +883,13 @@ The question does not specify genre, but does specify title type. I believe in t
 
 ```{r}
 task6_table <- NEW_TITLE_RATINGS_WITH_BIRTHYEAR |>
-  filter(titleType == "movie", numVotes > 100000)
+  filter(titleType.x == "movie", numVotes > 100000)
 
 task6_table |> 
-  group_by(tconst, primaryTitle, genres) |>
-  summarise( Average_Weighted_Rating = mean(weighted_rating)) |>
+  group_by(tconst, primaryTitle.x, genres.x) |>
+  summarise( Average_Weighted_Rating = mean(weighted_rating), .groups = "drop") |>
   arrange(desc(Average_Weighted_Rating)) |>
+  select(primaryTitle.x, genres.x, Average_Weighted_Rating) |>
   head(10) |>
   ungroup()
 
@@ -881,17 +899,18 @@ I have created the table above filtering our data for movies with more than 100,
 
 ```{r}
 TITLE_BASICS |>
-  filter(primaryTitle == "The Shawshank Redemption")
+  filter(primaryTitle == "The Shawshank Redemption") |>
+  select(-tconst, -originalTitle, -isAdult, -endYear)
 ```
 
 The following people participated in this production in different capacities. They are less than 100 years old and they might be alive. We can contact them to secure rights.
 
 ```{r}
-NEW_TITLE_RATINGS |>
+NEW_TITLE_RATINGS_WITH_BIRTHYEAR |>
   filter(tconst == "tt0111161") |>
-  left_join(NAME_BASICS, join_by(nconst == nconst)) |>
   filter(is.na(deathYear)) |>
-  filter(birthYear>"1924")
+  filter(birthYear > "1924") |>
+  select(primaryName, primaryProfession)
 
 ```
 
