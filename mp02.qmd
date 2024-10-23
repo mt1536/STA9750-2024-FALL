@@ -443,7 +443,7 @@ TITLE_RATINGS |>
 Based on this data. I would like to create a measure that leverages the ratings provided by individuals, but weights the rating by the number of people who voted. Therefore, I will weight titles by the quantile of the number of votes because this would give the rating a sense of popular awareness.
 
 ```{r}
-#| label: 'title_ratings_quantile'
+#| label: 'title_ratings_quantile_'
 TITLE_RATINGS |>
     pull(numVotes) |>
     quantile()
