@@ -4,3 +4,11 @@
 .Ruserdata
 
 /.quarto/
+
+*/*_cache/*
+
+*tsv*
+*csv*
+*xlsx*
+*zip
+.DS_Store
