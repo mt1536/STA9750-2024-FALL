@@ -571,7 +571,7 @@ for (year in 2005:2019) {
 
 
 ```{r, eval = FALSE}
-#OWRK IN PROGRESS THEREFORE EVAL=FALSE
+#WoRK IN PROGRESS THEREFORE EVAL=FALSE
 
 #Creating a table for the regression model
 
