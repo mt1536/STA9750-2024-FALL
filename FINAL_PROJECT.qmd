@@ -1,0 +1,607 @@
+---
+title: "Final Presentation"
+format: html
+message: false
+warning: false
+cache: false
+code-fold: FALSE
+code-summary: "See the code"
+---
+
+# Loading Packages
+
+Q
+
+```{r, include = FALSE, eval = TRUE}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(DT)
+library(httr)
+library(jsonlite)
+library(readr)
+library(sf)
+library(gt)
+library(knitr)
+library(gganimate)
+library(httr2)
+library(jsonlite)
+library(lubridate)
+library(tidycensus)
+library(fredr)
+fred_key <- readLines("fredr_key")
+fredr_set_key(fred_key)
+census_key <- readLines("census_key.txt", n = 1)
+census_api_key(census_key, install = TRUE, overwrite = TRUE)
+```
+
+```{r}
+#Unemployment Rate
+ 
+UNRATE <- fredr(
+  series_id = "UNRATE",
+  observation_start = as.Date("1990-01-01"),
+  observation_end = as.Date("2023-12-31"),
+  frequency = "m"  # monthly
+  )
+
+
+# New York State Unemployment Rate (Seasonally Adjusted)
+ny_unrate <- fredr(
+  series_id = "NYUR",
+  observation_start = as.Date("2005-01-01"),
+  observation_end = as.Date("2019-12-31"),
+  frequency = "a"  # monthly
+)
+
+
+
+```
+
+
+
+```{r}
+
+# Employment-Population Ratio: Measures percentage of population employed
+# Units:  Percent, Seasonally Adjusted
+EMRATIO <- fredr(
+  series_id = "EMRATIO",
+  observation_start = as.Date("1990-01-01"),
+  observation_end = as.Date("2023-12-31"),
+  frequency = "m"  # monthly
+  )
+
+```
+
+
+
+```{r}
+#|cache: TRUE
+
+# Population
+# Units: Thousands, Not Seasonally Adjusted
+
+POPULATION <- fredr(
+  series_id = "POPTHM",
+  observation_start = as.Date("1990-01-01"),
+  observation_end = as.Date("2023-12-31"),
+  frequency = "m"  # monthly
+  )
+
+```
+
+
+
+
+```{r}
+# fredr_series_search_text(
+#      search_text = "GENDER",
+#      limit = 100L
+#  )
+```
+
+
+```{r}
+
+# Find variables: https://api.census.gov/data/2020/dec/dhc/variables.html
+
+
+# population_data <- get_acs_data(
+#   year = 2010:2023, 
+#   geography = "us", variables = "B01001_001", 
+#   survey = "acs1")
+
+```
+
+```{r}
+unemployment_demographics <- read.csv("unemployment_demographics.csv")
+unemployment_demographics$Date <- parse_date(unemployment_demographics$Date, format = "%b-%Y")
+unemployment_demographics <- unemployment_demographics |>
+  mutate(
+    Date = as.character(Date)
+  ) |>
+  rename(date = Date) |>
+  mutate(
+    across(-date, ~ as.numeric(gsub("%", "", .), na.rm = TRUE))
+  )
+
+unemployment_demographics <- unemployment_demographics |>
+  mutate(date = as.Date(date, "%Y-%m-%d"))
+
+
+```
+
+Prepare a table for the model
+
+```{r}
+#Creating a table for the regression model
+
+model_table <- UNRATE |>
+  select(date, unemployment_rate = value) |>
+  left_join(POPULATION |>
+              select(date, total_population = value), 
+            by = "date") |>
+  mutate(unemployed_population = (total_population * unemployment_rate / 100))
+
+demographics <- unemployment_demographics |>
+  select(date, Women, Men, Black, Hispanic, White, X16.24, X25.54, X55.64, X65., Advanced.degree, 
+         Bachelor.s.degree, High.school, Less.than.HS, Some.college) |>
+  mutate(across(-date, as.numeric))
+
+model_table <- model_table |>
+  inner_join(demographics, join_by(date == date))
+
+
+```
+
+
+
+
+
+Demographic Characteristics
+
+1. _001: Total population (as you've seen).
+2. _002: Male population.
+3. _003: Female population.
+
+Racial and Ethnic Groups
+
+1. _004: White alone.
+2. _005: Black or African American alone.
+3. _006: American Indian and Alaska Native alone.
+
+Hispanic Origin
+
+1. _007: Hispanic or Latino.
+
+Other suffixes may indicate:
+
+1. Age groups (e.g., _010: Under 18).
+2. Household characteristics.
+
+Resources
+
+1. American Community Survey (ACS) documentation.
+2. ACS variable index or documentation.
+
+Consult ACS documentation for specific variable meanings and suffixes.
+
+
+
+```{r}
+
+# Initialize data frame
+ny_male_population_df <- data.frame()
+
+# Loop through years
+for (year in 2005:2019) {
+  # Retrieve data
+  male_population <- get_acs(
+    geography = "state",
+    state = "NY",
+    variables = "B03002_002",
+    year = year,
+    survey = "acs1"
+  )
+  
+  # Check for errors
+  if (nrow(male_population) > 0) {
+    # Add year column
+    male_population$year <- year
+    
+    # Bind rows to data frame
+    ny_male_population_df <- bind_rows(ny_male_population_df, male_population)
+  } else {
+    print(paste("No data available for", year))
+  }
+}
+
+
+```
+
+
+
+
+
+```{r}
+# Initialize data frame
+ny_female_population_df <- data.frame()
+
+# Loop through years
+for (year in 2005:2019) {
+  # Retrieve data
+  female_population <- get_acs(
+    geography = "state",
+    state = "NY",
+    variables = "B03002_003",
+    year = year,
+    survey = "acs1"
+  )
+  
+  # Check for errors
+  if (nrow(female_population) > 0) {
+    # Add year column
+    female_population$year <- year
+    
+    # Bind rows to data frame
+    ny_female_population_df <- bind_rows(ny_female_population_df, female_population)
+  } else {
+    print(paste("No data available for", year))
+  }
+}
+
+glimpse(ny_female_population_df)
+
+```
+
+
+
+```{r}
+
+# Initialize data frame
+ny_white_population_df <- data.frame()
+
+# Loop through years
+for (year in 2005:2019) {
+  # Retrieve data
+  white_population <- get_acs(
+    geography = "state",
+    state = "NY",
+    variables = "B02001_002",
+    year = year,
+    survey = "acs1"
+  )
+  
+  # Check for errors
+  if (nrow(white_population) > 0) {
+    # Add year column
+    white_population$year <- year
+    
+    # Bind rows to data frame
+    ny_white_population_df <- bind_rows(ny_white_population_df, white_population)
+  } else {
+    print(paste("No data available for", year))
+  }
+}
+
+```
+
+
+```{r}
+# Initialize data frame
+ny_black_population_df <- data.frame()
+
+# Loop through years
+for (year in 2005:2019) {
+  # Retrieve data
+  black_population <- get_acs(
+    geography = "state",
+    state = "NY",
+    variables = "B02001_002",
+    year = year,
+    survey = "acs1"
+  )
+  
+  # Check for errors
+  if (nrow(black_population) > 0) {
+    # Add year column
+    black_population$year <- year
+    
+    # Bind rows to data frame
+    ny_black_population_df <- bind_rows(ny_black_population_df, black_population)
+  } else {
+    print(paste("No data available for", year))
+  }
+}
+```
+
+
+```{r}
+# Initialize data frame
+ny_hispanic_population_df <- data.frame()
+
+# Loop through years
+for (year in 2005:2019) {
+  # Retrieve data
+  hispanic_population <- get_acs(
+    geography = "state",
+    state = "NY",
+    variables = "B03001_001",
+    year = year,
+    survey = "acs1"
+  )
+  
+  # Check for errors
+  if (nrow(hispanic_population) > 0) {
+    # Add year column
+    hispanic_population$year <- year
+    
+    # Bind rows to data frame
+    ny_hispanic_population_df <- bind_rows(ny_hispanic_population_df, hispanic_population)
+  } else {
+    print(paste("No data available for", year))
+  }
+}
+```
+
+
+```{r}
+# Initialize data frame
+ny_black_population_df <- data.frame()
+
+# Loop through years
+for (year in 2005:2019) {
+  # Retrieve data
+  black_population <- get_acs(
+    geography = "state",
+    state = "NY",
+    variables = "B02001_002",
+    year = year,
+    survey = "acs1"
+  )
+  
+  # Check for errors
+  if (nrow(black_population) > 0) {
+    # Add year column
+    black_population$year <- year
+    
+    # Bind rows to data frame
+    ny_black_population_df <- bind_rows(ny_black_population_df, black_population)
+  } else {
+    print(paste("No data available for", year))
+  }
+}
+```
+
+
+```{r}
+# Initialize data frame
+ny_asian_population_df <- data.frame()
+
+# Loop through years
+for (year in 2005:2019) {
+  # Retrieve data
+  asian_population <- get_acs(
+    geography = "state",
+    state = "NY",
+    variables = "B01001D_001",
+    year = year,
+    survey = "acs1"
+  )
+  
+  # Check for errors
+  if (nrow(asian_population) > 0) {
+    # Add year column
+    asian_population$year <- year
+    
+    # Bind rows to data frame
+    ny_asian_population_df <- bind_rows(ny_asian_population_df, asian_population)
+  } else {
+    print(paste("No data available for", year))
+  }
+}
+```
+
+
+```{r}
+
+# Initialize data frame
+less_than_hs_population_df <- data.frame()
+
+# Loop through years
+for (year in 2005:2019) {
+  # Retrieve data
+  less_than_hs_population <- get_acs(
+    geography = "state",
+    state = "NY",
+    variables = "B06009_002",
+    year = year,
+    survey = "acs1"
+  )
+  
+  # Check for errors
+  if (nrow(less_than_hs_population) > 0) {
+    # Add year column
+    less_than_hs_population$year <- year
+    
+    # Bind rows to data frame
+    less_than_hs_population_df <- bind_rows(less_than_hs_population_df, less_than_hs_population)
+  } else {
+    print(paste("No data available for", year))
+  }
+}
+
+```
+
+
+
+
+```{r}
+
+# Initialize data frame
+hs_population_df <- data.frame()
+
+# Loop through years
+for (year in 2005:2019) {
+  # Retrieve data
+  hs_population <- get_acs(
+    geography = "state",
+    state = "NY",
+    variables = "B06009_003",
+    year = year,
+    survey = "acs1"
+  )
+  
+  # Check for errors
+  if (nrow(hs_population) > 0) {
+    # Add year column
+    hs_population$year <- year
+    
+    # Bind rows to data frame
+    hs_population_df <- bind_rows(hs_population_df, hs_population)
+  } else {
+    print(paste("No data available for", year))
+  }
+}
+
+```
+
+
+
+```{r}
+
+#some college or associates degree
+# Initialize data frame
+some_college_population_df <- data.frame()
+
+# Loop through years
+for (year in 2005:2019) {
+  # Retrieve data
+  some_college_population <- get_acs(
+    geography = "state",
+    state = "NY",
+    variables = "B06009_004",
+    year = year,
+    survey = "acs1"
+  )
+  
+  # Check for errors
+  if (nrow(some_college_population) > 0) {
+    # Add year column
+    some_college_population$year <- year
+    
+    # Bind rows to data frame
+    some_college_population_df <- bind_rows(some_college_population_df, some_college_population)
+  } else {
+    print(paste("No data available for", year))
+  }
+}
+
+```
+
+
+
+
+
+```{r}
+
+# Initialize data frame
+bachelors_population_df <- data.frame()
+
+# Loop through years
+for (year in 2005:2019) {
+  # Retrieve data
+  bachelors_population <- get_acs(
+    geography = "state",
+    state = "NY",
+    variables = "B06009_005",
+    year = year,
+    survey = "acs1"
+  )
+  
+  # Check for errors
+  if (nrow(bachelors_population) > 0) {
+    # Add year column
+    bachelors_population$year <- year
+    
+    # Bind rows to data frame
+    bachelors_population_df <- bind_rows(bachelors_population_df, bachelors_population)
+  } else {
+    print(paste("No data available for", year))
+  }
+}
+
+```
+
+
+```{r}
+
+#Graduate or professional degree 
+# Initialize data frame
+
+graduate_population_df <- data.frame()
+
+# Loop through years
+for (year in 2005:2019) {
+  # Retrieve data
+  graduate_population <- get_acs(
+    geography = "state",
+    state = "NY",
+    variables = "B06009_005",
+    year = year,
+    survey = "acs1"
+  )
+  
+  # Check for errors
+  if (nrow(graduate_population) > 0) {
+    # Add year column
+    graduate_population$year <- year
+    
+    # Bind rows to data frame
+    graduate_population_df <- bind_rows(graduate_population_df, graduate_population)
+  } else {
+    print(paste("No data available for", year))
+  }
+}
+
+
+```
+
+
+
+```{r, eval = FALSE}
+#OWRK IN PROGRESS THEREFORE EVAL=FALSE
+
+#Creating a table for the regression model
+
+ny_unrate$year <- as.integer(format(ny_unrate$date, "%Y"))
+
+
+regression_model_table <- ny_unrate |>
+  left_join(ny_female_population_df |>
+              select(female_pop = estimate, year), join_by(year == year)) |>
+  select(-date)
+
+
+
+regression_model_table <- ny_unrate |>
+  select(year, unemployment_rate = value) |>
+  left_join(ny_female_population_df |>
+              select(female_pop = estimate, year), 
+            by = "year") |>
+  left_join(ny_male_population_df |>
+              select(male_pop = estimate, year),
+            by = "year") |>
+  left_join()
+
+
+
+
+
+
+
+```
+
+
+
