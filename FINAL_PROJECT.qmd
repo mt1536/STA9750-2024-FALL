@@ -570,8 +570,7 @@ for (year in 2005:2019) {
 
 
 
-```{r, eval = FALSE}
-#WoRK IN PROGRESS THEREFORE EVAL=FALSE
+```{r}
 
 #Creating a table for the regression model
 
@@ -593,15 +592,85 @@ regression_model_table <- ny_unrate |>
   left_join(ny_male_population_df |>
               select(male_pop = estimate, year),
             by = "year") |>
-  left_join()
+  left_join(less_than_hs_population_df |>
+              select(less_than_hs_pop = estimate, year),
+            by = "year") |>
+  left_join(hs_population_df |>
+              select(hs_pop = estimate, year),
+            by = "year") |>
+  left_join(some_college_population_df |>
+              select(some_college_pop = estimate, year),
+            by = "year") |>
+  left_join(bachelors_population_df |>
+              select(bachelors_pop = estimate, year),
+            by = "year") |>
+  left_join(graduate_population_df |>
+              select(graduate_pop = estimate, year),
+            by = "year") |>
+  left_join(ny_asian_population_df |>
+              select(ny_asian_pop = estimate, year),
+            by = "year") |>
+  left_join(ny_white_population_df |>
+              select(ny_white_pop = estimate, year),
+            by = "year") |>
+  left_join(ny_black_population_df |>
+              select(ny_black_pop = estimate, year),
+            by = "year") |>
+  left_join(ny_hispanic_population_df |>
+              select(ny_hispanic_pop = estimate, year),
+            by = "year")
+
+
+```
 
 
 
+```{r}
+# Build regression model
+regression_model <- lm(unemployment_rate ~ 
+                        female_pop + 
+                        male_pop + 
+                        less_than_hs_pop + 
+                        hs_pop + 
+                        some_college_pop + 
+                        bachelors_pop + 
+                        graduate_pop + 
+                        ny_asian_pop + 
+                        ny_white_pop + 
+                        ny_black_pop + 
+                        ny_hispanic_pop,
+                      data = regression_model_table)
 
+# Summarize the model
+summary(regression_model)
+
+```
+
+
+```{r}
+
+#Evaluating the performance of the regression
+
+library(broom)
+library(ggplot2)
+
+
+regression_model |>
+  augment() |>
+  ggplot(aes(x = .fitted, y = unemployment_rate)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1, color = "red") +
+  labs(title = "Predicted vs. Actual Unemployment Rates",
+       subtitle = "Linear Regression Model",
+       x = "Predicted Values", y = "Actual Values") +
+  theme_classic()
 
 
 
 ```
+
+
+
 
 
 
