@@ -1,5 +1,5 @@
 ---
-title: "What factors affect unemployment in New York?"
+title: "What Factors Affect Unemployment in New York?"
 format: 
   html:
     code-fold: TRUE
@@ -11,7 +11,7 @@ cache: false
 
 In the following section of the project, we will focus on using some of New York's demographics data to find what factors affect unemployment in New York.
 
-To do this, we will gather data from FRED and Census, and attempt to create a regression model which will help us answer the question. Although there are many important characteristics the could impact unemployment, on this project, we focused on demographics. It is important for us to understand the relationship between demographic factors and unemployment in New York given we live in New York, and therefore unemployment here might have an effect on our lives.
+To do this, we will gather data from FRED and Census, and attempt to create a regression model which will help us answer the question. Although there are many important characteristics that could impact unemployment, on this project, we focused on demographics. It is important for us to understand the relationship between demographic factors and unemployment in New York given we live in New York, and therefore unemployment here might have an effect on our lives.
 
 
 # Loading Packages
@@ -19,7 +19,7 @@ To do this, we will gather data from FRED and Census, and attempt to create a re
 We will start by loading the necessary packages in `R`.
 
 
-```{r, include = FALSE, eval = TRUE}
+```{r}
 
 # Install and load necessary libraries
 
@@ -520,7 +520,7 @@ for (year in 2005:2019) {
 
 # Data Preparation and Analysis
 
-To achieve our goal of finding what factors affect unemployment in New York, with an emphasis on demographics, we will prepare the data obtained for regression analysis. Using regression models, will help us see the effect of each factor on predicting unemployment rate in New York.
+To achieve our goal of finding what factors affect unemployment in New York, with an emphasis on demographics, we will prepare the data obtained for regression analysis. Using regression models will help us see the effect of each factor on predicting unemployment rate in New York.
 
 
 
@@ -628,9 +628,9 @@ summary(regression_model)
 
 ```
 
-From the model obtained, we can highlight the high R- squared value (0.96) which indicates that 96% of the variability in New York's unemployment rate can be explained by the variables selected using our model. Furthermore, we can see some of the predictors such as population with a high school degree, population with some college education, and Hispanic population, have a low p value. This indicates these factors are significant in our model. Given education encompasses a diverse set of racial and gender populations, we can deduce education is one of the most important factors related to unemployment in New York.
+From the model obtained, we can highlight the high R- squared value (0.96) which indicates that 96% of the variability in New York's unemployment rate can be explained by the variables selected using our model. Furthermore, we can see some of the predictors such as population with a high school degree, population with some college education, and Hispanic population, have a low p value. This indicates these factors are significant in our model. Given education level encompasses a diverse set of racial and gender populations, we can deduce education is one of the most important factors related to unemployment in New York.
 
-Furthermore, it makes sense that education is an important factor related to unemployment in New York, given that the more education an individual has, the more opportunities that individual might have given some jobs require certain levels of education.
+Furthermore, it makes sense that education level is an important factor related to unemployment in New York, given that the more education an individual has, the more opportunities that individual might have given some jobs require certain levels of education.
 
 
 
@@ -649,7 +649,7 @@ ggplot(df, aes(x = predicted, y = actual)) +
 
 ```
 
-From this graph, we can see that the unemployment rate predicted by our model aligns with the actual unemployment rate seen in our data. Furthermore, the following scatter plot showing residuals vs fitted values show that the variation is relatively small, and that the model is not violating linear regression assumptions such as linearity and constant variance.
+From this graph, we can see that the unemployment rate predicted by our model aligns with the actual unemployment rate seen in our data. Furthermore, the following scatter plot showing residuals vs fitted values shows that the variation is relatively small, and that the model is not violating linear regression assumptions such as linearity and constant variance.
 
 
 ```{r}
@@ -673,7 +673,7 @@ ggplot(residuals_df, aes(x = Fitted, y = Residuals)) +
 
 ```
 
-Now, that we have established the validity of our model, we would illustrate how it can be used. The following data, can be used to estimate the unemployment rate of an area of New York with the following demographic split of the population:
+Now that we have established the validity of our model, we will illustrate how it can be used. The following data, can be used to estimate the unemployment rate of an area of New York with the following demographic split of the population:
 
 
 ```{r}
@@ -756,11 +756,11 @@ print(predicted_unemployment_rate)
 ```
 
 # Conclusion
-Our initial objective was to find out what factors affect unemployment in New York. After obtaining data from FRED and Census, we created a regression model that helped us identify important factors related to unemployment in New York, the most important of which we concluded to be education based on statistical data found on out model. 
+Our initial objective was to find out what factors affect unemployment in New York. After obtaining data from FRED and Census, we created a regression model that helped us identify important factors related to unemployment in New York, the most important of which we concluded to be education level based on statistical data found on our model. 
 
 Education is important because it can allow individuals to access job opportunities that require a certain level of education to apply. Furthermore, it is something that can be changed for almost any individual regardless of other factors such as age and gender. 
 
-It is important to note, that there are many factors that could impact unemployment. On this project, however, we focused on demographics because given the diversity existing in New York, we though it would interesting to explore.
+It is important to note that there are many factors that could impact unemployment. On this project, however, we focused on demographics because given the diversity existing in New York, we thought it would be interesting to explore.
 
 Going forward, it would be interesting to continue exploring this question with a bigger scope than demographic. For example, we might look to continue expanding our model to include other variables such as income and occupation, and removing variables that might not be as significant.
 
