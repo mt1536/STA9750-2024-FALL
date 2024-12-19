@@ -1,5 +1,5 @@
 ---
-title: "Final Presentation"
+title: "What factors affect unemployment in New York?"
 format: html
 message: false
 warning: false
@@ -8,33 +8,82 @@ code-fold: FALSE
 code-summary: "See the code"
 ---
 
+In the following section of the project, we will focus on using some of New York's demographics data to find what factors affect unemployment in New York.
+
+To do this, we will gather data from FRED and Census, and attempt to create a regression model which will help us answer the question. Although there are many important characteristics the could impact unemployment, on this project, we focused on demographics. It is important for us to understand the relationship between demographic factors and unemployment in New York given we live in New York, and therefore unemployment here might have an effect on our lives.
+
+
 # Loading Packages
 
-Q
+We will start by loading the necessary packages in `R`.
+
 
 ```{r, include = FALSE, eval = TRUE}
+
+# Install and load necessary libraries
+
+if (!require("tidyverse")) install.packages("tidyverse")
 library(tidyverse)
+
+if (!require("dplyr")) install.packages("dplyr")
 library(dplyr)
+
+if (!require("ggplot2")) install.packages("ggplot2")
 library(ggplot2)
+
+if (!require("stringr")) install.packages("stringr")
 library(stringr)
+
+if (!require("DT")) install.packages("DT")
 library(DT)
+
+if (!require("httr")) install.packages("httr")
 library(httr)
+
+if (!require("jsonlite")) install.packages("jsonlite")
 library(jsonlite)
+
+if (!require("readr")) install.packages("readr")
 library(readr)
+
+if (!require("sf")) install.packages("sf")
 library(sf)
+
+if (!require("gt")) install.packages("gt")
 library(gt)
+
+if (!require("knitr")) install.packages("knitr")
 library(knitr)
+
+if (!require("gganimate")) install.packages("gganimate")
 library(gganimate)
+
+if (!require("httr2")) install.packages("httr2")
 library(httr2)
-library(jsonlite)
+
+if (!require("lubridate")) install.packages("lubridate")
 library(lubridate)
+
+if (!require("tidycensus")) install.packages("tidycensus")
 library(tidycensus)
+
+if (!require("fredr")) install.packages("fredr")
 library(fredr)
-fred_key <- readLines("fredr_key")
+
+```
+
+Now, I will load my keys to access FRED and Census data through API:
+
+```{r}
+fred_key <- readLines("fredr_key", n = 1, ok = TRUE, warn = FALSE)
 fredr_set_key(fred_key)
 census_key <- readLines("census_key.txt", n = 1)
-census_api_key(census_key, install = TRUE, overwrite = TRUE)
+invisible(census_api_key(census_key, install = TRUE, overwrite = TRUE))
 ```
+
+# Loading Packages
+
+Now, we start obtaining the data necessary for our analysis.
 
 ```{r}
 #Unemployment Rate
@@ -55,10 +104,7 @@ ny_unrate <- fredr(
   frequency = "a"  # monthly
 )
 
-
-
 ```
-
 
 
 ```{r}
@@ -90,102 +136,6 @@ POPULATION <- fredr(
   )
 
 ```
-
-
-
-
-```{r}
-# fredr_series_search_text(
-#      search_text = "GENDER",
-#      limit = 100L
-#  )
-```
-
-
-```{r}
-
-# Find variables: https://api.census.gov/data/2020/dec/dhc/variables.html
-
-
-# population_data <- get_acs_data(
-#   year = 2010:2023, 
-#   geography = "us", variables = "B01001_001", 
-#   survey = "acs1")
-
-```
-
-```{r}
-unemployment_demographics <- read.csv("unemployment_demographics.csv")
-unemployment_demographics$Date <- parse_date(unemployment_demographics$Date, format = "%b-%Y")
-unemployment_demographics <- unemployment_demographics |>
-  mutate(
-    Date = as.character(Date)
-  ) |>
-  rename(date = Date) |>
-  mutate(
-    across(-date, ~ as.numeric(gsub("%", "", .), na.rm = TRUE))
-  )
-
-unemployment_demographics <- unemployment_demographics |>
-  mutate(date = as.Date(date, "%Y-%m-%d"))
-
-
-```
-
-Prepare a table for the model
-
-```{r}
-#Creating a table for the regression model
-
-model_table <- UNRATE |>
-  select(date, unemployment_rate = value) |>
-  left_join(POPULATION |>
-              select(date, total_population = value), 
-            by = "date") |>
-  mutate(unemployed_population = (total_population * unemployment_rate / 100))
-
-demographics <- unemployment_demographics |>
-  select(date, Women, Men, Black, Hispanic, White, X16.24, X25.54, X55.64, X65., Advanced.degree, 
-         Bachelor.s.degree, High.school, Less.than.HS, Some.college) |>
-  mutate(across(-date, as.numeric))
-
-model_table <- model_table |>
-  inner_join(demographics, join_by(date == date))
-
-
-```
-
-
-
-
-
-Demographic Characteristics
-
-1. _001: Total population (as you've seen).
-2. _002: Male population.
-3. _003: Female population.
-
-Racial and Ethnic Groups
-
-1. _004: White alone.
-2. _005: Black or African American alone.
-3. _006: American Indian and Alaska Native alone.
-
-Hispanic Origin
-
-1. _007: Hispanic or Latino.
-
-Other suffixes may indicate:
-
-1. Age groups (e.g., _010: Under 18).
-2. Household characteristics.
-
-Resources
-
-1. American Community Survey (ACS) documentation.
-2. ACS variable index or documentation.
-
-Consult ACS documentation for specific variable meanings and suffixes.
 
 
 
@@ -569,6 +519,11 @@ for (year in 2005:2019) {
 ```
 
 
+# Data Preparation and Analysis
+
+To achieve our goal of finding what factors affect unemployment in New York, with an emphasis on demographics, we will prepare the data obtained for regression analysis. Using regression models, will help us see the effect of each factor on predicting unemployment rate in New York.
+
+
 
 ```{r}
 
@@ -624,6 +579,8 @@ regression_model_table <- ny_unrate |>
 ```
 
 
+The following is a regression model using all of the variables we researching:
+
 
 ```{r}
 # Build regression model
@@ -647,29 +604,166 @@ summary(regression_model)
 ```
 
 
+As we can see, there are some demographic factors that do not contribute to the model, such as the number of people with a graduate degree, and the Black race population. Therefore, we will remove those to clean our model:
+
+
 ```{r}
+# Build regression model
+regression_model <- lm(unemployment_rate ~ 
+                        female_pop + 
+                        male_pop + 
+                        less_than_hs_pop + 
+                        hs_pop + 
+                        some_college_pop + 
+                        bachelors_pop + 
+                        
+                        ny_asian_pop + 
+                        ny_white_pop + 
+                        
+                        ny_hispanic_pop,
+                      data = regression_model_table)
 
-#Evaluating the performance of the regression
-
-library(broom)
-library(ggplot2)
-
-
-regression_model |>
-  augment() |>
-  ggplot(aes(x = .fitted, y = unemployment_rate)) +
-  geom_point() +
-  geom_abline(intercept = 0, slope = 1, color = "red") +
-  labs(title = "Predicted vs. Actual Unemployment Rates",
-       subtitle = "Linear Regression Model",
-       x = "Predicted Values", y = "Actual Values") +
-  theme_classic()
-
+# Summarize the model
+summary(regression_model)
 
 
 ```
 
+From the model obtained, we can highlight the high R- squared value (0.96) which indicates that 96% of the variability in New York's unemployment rate can be explained by the variables selected using our model. Furthermore, we can see some of the predictors such as population with a high school degree, population with some college education, and Hispanic population, have a low p value. This indicates these factors are significant in our model. Given education encompasses a diverse set of racial and gender populations, we can deduce education is one of the most important factors related to unemployment in New York.
 
+Furthermore, it makes sense that education is an important factor related to unemployment in New York, given that the more education an individual has, the more opportunities that individual might have given some jobs require certain levels of education.
+
+
+
+Now, let us visually inspect the performance of our model:
+
+
+```{r}
+predicted_values <- predict(regression_model)
+actual_values <- regression_model_table$unemployment_rate
+df <- data.frame(predicted = predicted_values, actual = actual_values)
+ggplot(df, aes(x = predicted, y = actual)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1, color = "red") +
+  labs(title = "Predicted vs Actual Unemployment Rates") +
+  theme_classic()
+
+```
+
+From this graph, we can see that the unemployment rate predicted by our model aligns with the actual unemployment rate seen in our data. Furthermore, the following scatter plot showing residuals vs fitted values show that the variation is relatively small, and that the model is not violating linear regression assumptions such as linearity and constant variance.
+
+
+```{r}
+
+# Create data frame with residuals and fitted values
+residuals_df <- data.frame(
+  Fitted = fitted(regression_model),
+  Residuals = residuals(regression_model)
+)
+
+# Plot
+ggplot(residuals_df, aes(x = Fitted, y = Residuals)) +
+  geom_point() +
+  geom_hline(yintercept = 0, color = "red") +
+  labs(title = "Residuals vs Fitted Values",
+       subtitle = "Linear Regression Model",
+       x = "Fitted Values",
+       y = "Residuals") +
+  theme_classic()
+
+
+```
+
+Now, that we have established the validity of our model, we would illustrate how it can be used. The following data, can be used to estimate the unemployment rate of an area of New York with the following demographic split of the population:
+
+
+```{r}
+# Create new data frame with input values
+new_data <- data.frame(
+  female_pop = 11227534,
+  male_pop = 16037745,
+  less_than_hs_pop = 1954719,
+  hs_pop = 3615023,
+  some_college_pop = 3276724,
+  bachelors_pop = 2531374,
+  graduate_pop = 2531374,
+  ny_asian_pop = 1498346,
+  ny_white_pop = 12695280,
+  ny_black_pop = 12695280,
+  ny_hispanic_pop = 19541453
+)
+
+
+# Rename columns for clarity
+colnames(new_data) <- c(
+  "Female",
+  "Male",
+  "Less Than High School",
+  "High School",
+  "Some College",
+  "Bachelor's",
+  "Graduate",
+  "Asian",
+  "White",
+  "Black",
+  "Hispanic"
+)
+
+# Pivot the data to horizontal format
+new_data_horizontal <- new_data %>% 
+  pivot_longer(
+    cols = everything(),
+    names_to = "Category",
+    values_to = "Population"
+  )
+
+# Format numbers with commas
+new_data_horizontal$Population <- format(as.numeric(gsub(",", "", new_data_horizontal$Population)), big.mark = ",")
+
+# Display as a datatable
+datatable(new_data_horizontal, 
+          options = list(
+            pageLength = 11, 
+            lengthChange = FALSE
+          )
+)
+
+
+```
+After we input these variables in our model, we get an estimated unemployment rate of 5.83%.
+
+```{r}
+
+# Variables can be changed to get a new prediction
+new_data <- data.frame(
+  female_pop = 11227534,
+  male_pop = 16037745,
+  less_than_hs_pop = 1954719,
+  hs_pop = 3615023,
+  some_college_pop = 3276724,
+  bachelors_pop = 2531374,
+  graduate_pop = 2531374,
+  ny_asian_pop = 1498346,
+  ny_white_pop = 12695280,
+  ny_black_pop = 12695280,
+  ny_hispanic_pop = 19541453
+)
+
+# Use the model to predict unemployment rate
+predicted_unemployment_rate <- predict(regression_model, new_data)
+
+# Print the predicted value
+print(predicted_unemployment_rate)
+```
+
+# Conclusion
+Our initial objective was to find out what factors affect unemployment in New York. After obtaining data from FRED and Census, we created a regression model that helped us identify important factors related to unemployment in New York, the most important of which we concluded to be education based on statistical data found on out model. 
+
+Education is important because it can allow individuals to access job opportunities that require a certain level of education to apply. Furthermore, it is something that can be changed for almost any individual regardless of other factors such as age and gender. 
+
+It is important to note, that there are many factors that could impact unemployment. On this project, however, we focused on demographics because given the diversity existing in New York, we though it would interesting to explore.
+
+Going forward, it would be interesting to continue exploring this question with a bigger scope than demographic. For example, we might look to continue expanding our model to include other variables such as income and occupation, and removing variables that might not be as significant.
 
 
 
