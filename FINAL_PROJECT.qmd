@@ -1,11 +1,12 @@
 ---
 title: "What factors affect unemployment in New York?"
-format: html
+format: 
+  html:
+    code-fold: TRUE
+    code-summary: "See the code"
 message: false
 warning: false
 cache: false
-code-fold: TRUE
-code-summary: "See the code"
 ---
 
 In the following section of the project, we will focus on using some of New York's demographics data to find what factors affect unemployment in New York.
