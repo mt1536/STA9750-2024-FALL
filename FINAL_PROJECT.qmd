@@ -82,7 +82,7 @@ census_key <- readLines("census_key.txt", n = 1)
 invisible(census_api_key(census_key, install = TRUE, overwrite = TRUE))
 ```
 
-# Loading Packages
+# Obtaining Data
 
 Now, we start obtaining the data necessary for our analysis.
 
@@ -201,8 +201,6 @@ for (year in 2005:2019) {
     print(paste("No data available for", year))
   }
 }
-
-glimpse(ny_female_population_df)
 
 ```
 
